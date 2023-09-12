@@ -1,5 +1,7 @@
 <?php
 
+use pizzashop\shop\domain\dto\order\OrderDTO;
+
 class CommandeService
 {
 
@@ -24,6 +26,11 @@ class CommandeService
         $orderDTO->etat = 2;
         $orderDTO->save();
         */
+    }
+
+    public function createOrder(OrderDTO $orderDTO) {
+
+        return $orderDTO;
     }
 
 
