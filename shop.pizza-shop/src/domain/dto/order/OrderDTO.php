@@ -14,7 +14,6 @@ class OrderDTO extends DTO
     private string $mail_client;
     private float $montant;
     private int $delai;
-
     private array $itemsDTO;
 
 
@@ -87,6 +86,16 @@ class OrderDTO extends DTO
     public function setDelai(int $delai): void
     {
         $this->delai = $delai;
+    }
+
+    public function getItemsDTO(): array
+    {
+        return $this->itemsDTO;
+    }
+
+    public function setItemsDTO(array $itemsDTO): void
+    {
+        $this->itemsDTO = $itemsDTO;
     }
 
 }
