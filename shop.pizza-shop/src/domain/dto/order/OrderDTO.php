@@ -3,8 +3,9 @@
 namespace pizzashop\shop\domain\dto\order;
 
 use PhpParser\Node\Expr\Cast\Double;
+use pizzashop\shop\domain\dto\DTO;
 
-class OrderDTO
+class OrderDTO extends DTO
 {
 
     private string $id;
@@ -14,7 +15,6 @@ class OrderDTO
     private float $montant;
     private int $delai;
 
-    //
 
     public function __construct(string $id, string $date, int $type_livraison, string $mail_client, float $montant, int $delai)
     {
