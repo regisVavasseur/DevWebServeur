@@ -5,6 +5,12 @@ use pizzashop\shop\domain\dto\order\OrderDTO;
 class CommandeService
 {
 
+
+    public function __construct(CommandeService $commandeService)
+    {
+        $this->commandeService = $commandeService;
+    }
+
     public function readOrder($id_commande)
     {
         $orderDTO = OrderDTO::find($id_commande);
