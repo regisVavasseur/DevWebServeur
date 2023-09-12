@@ -31,6 +31,11 @@ class CommandeService
 
     }
 
+    public function createOrder(OrderDTO $orderDTO) {
+
+        return $orderDTO;
+    }
+
 
 
 

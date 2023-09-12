@@ -2,6 +2,8 @@
 
 namespace pizzashop\shop\domain\dto;
 
+use Illuminate\Database\Eloquent\Model;
+
 abstract class DTO
 {
 
