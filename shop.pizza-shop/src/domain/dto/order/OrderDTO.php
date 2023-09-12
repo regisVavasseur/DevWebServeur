@@ -14,6 +14,8 @@ class OrderDTO
     private float $montant;
     private int $delai;
 
+    //
+
     public function __construct(string $id, string $date, int $type_livraison, string $mail_client, float $montant, int $delai)
     {
         $this->id = $id;
