@@ -20,6 +20,4 @@ class ProduitDTO extends \pizzashop\shop\domain\dto\DTO
         $this->tarif = $tarif;
     }
 
-
-
 }
