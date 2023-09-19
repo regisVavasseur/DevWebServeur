@@ -18,17 +18,17 @@ class CommandeService implements iCommander
 
     public function creerCommande(CommandeDTO $commandeDTO): CommandeDTO
     {
-        $emailClient = $orderDTO->getMailClient();
-        $typeLivraison = $orderDTO->getTypeLivraison();
-        $arrayItems = $orderDTO->getItemsDTO();
+        $emailClient = $commandeDTO->getMailClient();
+        $typeLivraison = $commandeDTO->getTypeLivraison();
+        $arrayItems = $commandeDTO->getItemsDTO();
 
-        $order = new Commande();
-        $order->id = Uuid::uuid4()->toString();
-        $order->idClient = $emailClient;
-        $order->date_commande = date("Y-m-d H:i:s");
-        $order->type_livraison = $typeLivraison;
-        $order->etat = $order::ETAT_CREE;
-        $order->delai = 0;
+        $commande = new Commande();
+        $commande->id = Uuid::uuid4()->toString();
+        $commande->idClient = $emailClient;
+        $commande->date_commande = date("Y-m-d H:i:s");
+        $commande->type_livraison = $typeLivraison;
+        $commande->etat = $commande::ETAT_CREE;
+        $commande->delai = 0;
 
         $total_price = 0;
 
@@ -38,12 +38,12 @@ class CommandeService implements iCommander
             $this->creerItem($item);
         }
 
-        $order->montant_total = $total_price;
-        $orderDTO->setMontant($total_price);
+        $commande->montant_total = $total_price;
+        $commandeDTO->setMontant($total_price);
 
-        $order->save();
+        $commande->save();
 
-        return $orderDTO;    
+        return $commandeDTO;
     }
     
     public function creerItem(ItemDTO $itemDTO) {
