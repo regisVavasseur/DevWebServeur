@@ -23,8 +23,8 @@ class Commande extends \Illuminate\Database\Eloquent\Model
 
     public function calculerMontantTotal(){}
 
-    /*public function toDTO() : CommandeDTO{
-        $commandeDTO = new CommandeDTO($this->mailClient);
-    }*/
+    public function toDTO() : CommandeDTO{
+        $commandeDTO = new CommandeDTO($this->id_client);
+    }
 
 }

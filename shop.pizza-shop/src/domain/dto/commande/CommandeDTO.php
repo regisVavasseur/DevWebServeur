@@ -1,11 +1,11 @@
 <?php
 
-namespace pizzashop\shop\domain\dto\order;
+namespace pizzashop\shop\domain\dto\commande;
 
 use PhpParser\Node\Expr\Cast\Double;
 use pizzashop\shop\domain\dto\DTO;
 
-class OrderDTO extends DTO
+class CommandeDTO extends DTO
 {
 
     private string $id;
@@ -14,9 +14,10 @@ class OrderDTO extends DTO
     private string $mail_client;
     private float $montant;
     private int $delai;
+    private array $itemsDTO;
 
 
-    public function __construct(string $id, string $date, int $type_livraison, string $mail_client, float $montant, int $delai)
+    public function __construct(string $id, string $date, int $type_livraison, string $mail_client, float $montant, int $delai, array $itemsDTO)
     {
         $this->id = $id;
         $this->date = $date;
@@ -24,6 +25,7 @@ class OrderDTO extends DTO
         $this->mail_client = $mail_client;
         $this->montant = $montant;
         $this->delai = $delai;
+        $this->itemsDTO = $itemsDTO;
     }
 
     public function getId(): string
