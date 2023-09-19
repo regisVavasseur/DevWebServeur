@@ -1,46 +1,23 @@
 <?php
 
+use pizzashop\shop\domain\dto\commande\CommandeDTO;
 use pizzashop\shop\domain\dto\item\ItemDTO;
-use pizzashop\shop\domain\dto\order\OrderDTO;
 use Ramsey\Uuid\Uuid;
 
-class CommandeService
+class CommandeService implements iCommander
 {
 
+    private iInfoProduit $iInfoProduit;
 
-    public function __construct(CommandeService $commandeService)
+    public function __construct(iInfoProduit $serviceinfoProduit)
     {
-        $this->commandeService = $commandeService;
+        $this->iInfoProduit = $serviceinfoProduit;
+        //logger
     }
+    
 
-    public function readOrder($id_commande)
+    public function creerCommande(CommandeDTO $commandeDTO): CommandeDTO
     {
-        $orderDTO = OrderDTO::find($id_commande);
-        if ($orderDTO == null) {
-            throw new ServiceCommandeNotFoundException();
-        }
-        return $orderDTO;
-
-    }
-
-    public function validateOrder($id_commande)
-    {
-
-        $orderDTO = OrderDTO::find($id_commande);
-        if ($orderDTO == null) {
-            throw new ServiceCommandeNotFoundException();
-        }
-        if ($orderDTO->etat != 1) {
-            throw new ServiceCommandeInvalidException();
-        }
-        $orderDTO->etat = 2;
-        $orderDTO->save();
-        return $orderDTO;
-
-    }
-
-    public function createOrder(OrderDTO $orderDTO) {
-
         $emailClient = $orderDTO->getMailClient();
         $typeLivraison = $orderDTO->getTypeLivraison();
         $arrayItems = $orderDTO->getItemsDTO();
@@ -50,15 +27,15 @@ class CommandeService
         $order->idClient = $emailClient;
         $order->date_commande = date("Y-m-d H:i:s");
         $order->type_livraison = $typeLivraison;
-        $order->etat = 1;
+        $order->etat = $order::ETAT_CREE;
         $order->delai = 0;
 
         $total_price = 0;
 
         foreach ($arrayItems as $item) {
-           $total_price += ($item->getPrix() * $item->getQuantite());
+            $total_price += ($item->getPrix() * $item->getQuantite());
 
-           createItem($item);
+            $this->creerItem($item);
         }
 
         $order->montant_total = $total_price;
@@ -66,10 +43,10 @@ class CommandeService
 
         $order->save();
 
-        return $orderDTO;
+        return $orderDTO;    
     }
-
-    public function createItem(ItemDTO $itemDTO) {
+    
+    public function creerItem(ItemDTO $itemDTO) {
         $item = new Item();
 
         $item->numero = $itemDTO->getNumero();
@@ -79,4 +56,28 @@ class CommandeService
         $item->save();
     }
 
+    public function accederCommande(string $idCommande): CommandeDTO
+    {
+        // utilisation de try / catch ?
+        $orderDTO = CommandeDTO::findOrFail($idCommande);
+        if ($orderDTO == null) {
+            throw new ServiceCommandeNotFoundException();
+        }
+        // $order
+        return $orderDTO;
+    }
+
+    public function validerCommande(string $idCommande): CommandeDTO
+    {
+        $orderDTO = CommandeDTO::find($idCommande);
+        if ($orderDTO == null) {
+            throw new ServiceCommandeNotFoundException();
+        }
+        if ($orderDTO->etat != 1) {
+            throw new ServiceCommandeInvalidException();
+        }
+        $orderDTO->etat = 2;
+        $orderDTO->save();
+        return $orderDTO;
+    }
 }
