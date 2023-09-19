@@ -2,10 +2,10 @@
 
 namespace pizzashop\tests\commande;
 
+use Commande;
 use Faker\Factory;
+use Item;
 use PHPUnit\Framework\Attributes\DataProvider;
-use pizzashop\shop\domain\entities\commande\Commande;
-use pizzashop\shop\domain\entities\commande\Item;
 use Illuminate\Database\Capsule\Manager as DB;
 
 class ServiceCommandeTest extends \PHPUnit\Framework\TestCase {
@@ -27,8 +27,8 @@ class ServiceCommandeTest extends \PHPUnit\Framework\TestCase {
         $db->setAsGlobal();
         $db->bootEloquent();
 
-        self::$serviceProduits = new \pizzashop\shop\domain\service\catalogue\ServiceCatalogue();
-        self::$serviceCommande = new \pizzashop\shop\domain\service\commande\ServiceCommande(self::$serviceProduits);
+        self::$serviceProduits = new \CatalogueService();
+        self::$serviceCommande = new \CommandeService(self::$serviceProduits);
         self::$faker = Factory::create('fr_FR');
         self::fillDB();
         print_r(self::$commandeIds);
