@@ -3,16 +3,21 @@
 use pizzashop\shop\domain\dto\commande\CommandeDTO;
 use pizzashop\shop\domain\dto\item\ItemDTO;
 use Ramsey\Uuid\Uuid;
+use Monolog\Logger;
 
 class CommandeService implements iCommander
 {
 
     private iInfoProduit $iInfoProduit;
+    private Logger $logger;
 
     public function __construct(iInfoProduit $serviceinfoProduit)
     {
         $this->iInfoProduit = $serviceinfoProduit;
-        //logger
+        $this->logger = new Logger('CommandeServiceLogger');
+
+        //exemple d'utilisation du logger
+        //$this->logger->info('CommandeServiceLogger: CommandeService instancié');
     }
     
 
