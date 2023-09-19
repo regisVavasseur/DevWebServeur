@@ -13,8 +13,8 @@ CREATE TABLE `commande` (
   `type_livraison` int(11) NOT NULL DEFAULT 1,
   `etat` int(11) NOT NULL DEFAULT 1,
   `montant_total` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `id_client` varchar(128) NOT NULL,
-  KEY `id_client` (`id_client`)
+  `mail_client` varchar(128) NOT NULL,
+  KEY `id_client` (`mail_client`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -24,6 +24,7 @@ CREATE TABLE `item` (
   `numero` int(11) NOT NULL,
   `libelle` varchar(32) NOT NULL,
   `taille` int(11) NOT NULL,
+  `libelle_taille` varchar(32) NOT NULL,
   `tarif` decimal(6,2) NOT NULL,
   `quantite` int(11) NOT NULL,
   `commande_id` varchar(64) NOT NULL,
@@ -31,4 +32,4 @@ CREATE TABLE `item` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- 2023-09-01 09:50:03
+-- 2023-09-06 14:47:17
