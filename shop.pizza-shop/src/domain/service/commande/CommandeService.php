@@ -18,9 +18,18 @@ class CommandeService implements iCommander
 
     public function creerCommande(CommandeDTO $commandeDTO): CommandeDTO
     {
-        $emailClient = $commandeDTO->getMailClient();
-        $typeLivraison = $commandeDTO->getTypeLivraison();
-        $arrayItems = $commandeDTO->getItemsDTO();
+        if ($commandeDTO->getMailClient() == null || filter_var($commandeDTO->getMailClient(),FILTER_VALIDATE_EMAIL) || $commandeDTO->getTypeLivraison() == null) {
+            throw new ServiceCommandeInvalidException();
+        } else {
+            $emailClient = $commandeDTO->getMailClient();
+            $typeLivraison = $commandeDTO->getTypeLivraison();
+        }
+
+        if ($commandeDTO->getItemsDTO() == null) {
+            throw new ServiceCommandeInvalidException();
+        }else {
+            $arrayItems = $commandeDTO->getItemsDTO();
+        }
 
         $commande = new Commande();
         $commande->id = Uuid::uuid4()->toString();
