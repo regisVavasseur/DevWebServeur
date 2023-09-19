@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use pizzashop\shop\domain\dto\commande\CommandeDTO;
 use pizzashop\shop\domain\dto\item\ItemDTO;
 use Ramsey\Uuid\Uuid;
@@ -16,10 +17,10 @@ class CommandeService implements iCommander
         $this->iInfoProduit = $serviceinfoProduit;
         $this->logger = new Logger('CommandeServiceLogger');
     }
-    
 
     public function creerCommande(CommandeDTO $commandeDTO): CommandeDTO
     {
+        //function validerCommandeDeCommande(CommandeDTO) exercice 4
         if ($commandeDTO->getMailClient() == null || filter_var($commandeDTO->getMailClient(),FILTER_VALIDATE_EMAIL) || $commandeDTO->getTypeLivraison() == null) {
             throw new ServiceCommandeInvalidException();
         } else {
@@ -32,6 +33,7 @@ class CommandeService implements iCommander
         }else {
             $arrayItems = $commandeDTO->getItemsDTO();
         }
+        //fin exo4
 
         $commande = new Commande();
         $commande->id = Uuid::uuid4()->toString();
@@ -58,7 +60,7 @@ class CommandeService implements iCommander
 
         return $commandeDTO;
     }
-    
+
     public function creerItem(ItemDTO $itemDTO) {
         $item = new Item();
 
@@ -71,26 +73,28 @@ class CommandeService implements iCommander
 
     public function accederCommande(string $idCommande): CommandeDTO
     {
-        // utilisation de try / catch ?
-        $orderDTO = CommandeDTO::findOrFail($idCommande);
-        if ($orderDTO == null) {
-            throw new ServiceCommandeNotFoundException();
+        try {
+            $commande = Commande::findOrFail($idCommande);
+        } catch (ModelNotFoundException $e) {
+            throw new ServiceCommandeNotFoundException($e);
         }
-        // $order
-        return $orderDTO;
+        // $commande
+        return $commande->toDTO();
     }
 
     public function validerCommande(string $idCommande): CommandeDTO
     {
-        $orderDTO = CommandeDTO::find($idCommande);
-        if ($orderDTO == null) {
-            throw new ServiceCommandeNotFoundException();
-        }
-        if ($orderDTO->etat != 1) {
+        try {
+            $commande = Commande::find($idCommande);
+        } catch (ModelNotFoundException $e) {
             throw new ServiceCommandeInvalidException();
         }
-        $orderDTO->etat = 2;
-        $orderDTO->save();
-        return $orderDTO;
+        if ($commande->etat > Commande::ETAT_VALIDE) {
+            throw new ServiceCommandeInvalidException();
+        }
+        $commande->update(['etat' => Commande::ETAT_VALIDE]);
+        //logger
+        $commande->save();
+        return $commande->toDTO();
     }
 }
