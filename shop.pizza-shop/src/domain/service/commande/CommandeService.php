@@ -15,9 +15,6 @@ class CommandeService implements iCommander
     {
         $this->iInfoProduit = $serviceinfoProduit;
         $this->logger = new Logger('CommandeServiceLogger');
-
-        //exemple d'utilisation du logger
-        //$this->logger->info('CommandeServiceLogger: CommandeService instancié');
     }
     
 
@@ -56,6 +53,8 @@ class CommandeService implements iCommander
         $commandeDTO->setMontant($total_price);
 
         $commande->save();
+
+        $this->logger->info('CommandeServiceLogger: CommandeService: Commande créée');
 
         return $commandeDTO;
     }
