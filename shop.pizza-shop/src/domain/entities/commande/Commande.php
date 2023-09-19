@@ -23,8 +23,16 @@ class Commande extends \Illuminate\Database\Eloquent\Model
 
     public function calculerMontantTotal(){}
 
+    public function items() {
+        $this->hasMany(Item::class, 'commande_id');
+    }
+
     public function toDTO() : CommandeDTO{
-        $commandeDTO = new CommandeDTO($this->id_client);
+        $commandeDTO = new CommandeDTO($this->id, $this->date_commande, $this->type_livraison ,$this->mail_client, $this->montant_total, $this->delai, []);
+        foreach ($this->items() as $item) {
+            $commandeDTO->addItem($item->toDTO());
+        }
+        return $commandeDTO;
     }
 
 }

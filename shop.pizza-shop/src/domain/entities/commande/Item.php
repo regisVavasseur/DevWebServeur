@@ -1,5 +1,7 @@
 <?php
 
+use pizzashop\shop\domain\dto\item\ItemDTO;
+
 class Item extends \Illuminate\Database\Eloquent\Model
 {
 
@@ -12,6 +14,11 @@ class Item extends \Illuminate\Database\Eloquent\Model
     public function commande()
     {
         return $this->belongsTo(Commande::class, 'commande_id');
+    }
+
+    public function toDTO() : ItemDTO {
+        $itemDTO = new ItemDTO($this->id ,$this->numero, $this->libelle, $this->taille, $this->quantite,$this->tarif);
+        return $itemDTO;
     }
 
 }

@@ -4,19 +4,22 @@ namespace pizzashop\shop\domain\dto\item;
 
 class ItemDTO extends DTO
 {
+    private int $id;
     private int $numero;
     private string $libelle;
     private int $taille;
     private int $quantite;
     private float $prix;
 
-    public function __construct(int $numero, string $libelle, int $taille, int $quantite, float $prix)
+    public function __construct(int $id, int $numero, string $libelle, int $taille, int $quantite, float $prix)
     {
+        $this->id = $id;
         $this->numero = $numero;
         $this->libelle = $libelle;
         $this->taille = $taille;
         $this->quantite = $quantite;
         $this->prix = $prix;
+
     }
 
     public function getNumero(): int
