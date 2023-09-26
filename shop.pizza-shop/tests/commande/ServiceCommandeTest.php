@@ -97,12 +97,12 @@ class ServiceCommandeTest extends \PHPUnit\Framework\TestCase {
             $commandeEntity = Commande::find($id);
             $commandeDTO = self::$serviceCommande->accederCommande($id);
             $this->assertNotNull($commandeDTO);
-            $this->assertEquals($id, $commandeDTO->id);
-            $this->assertEquals($commandeEntity->id_client, $commandeDTO->mail_client);
-            $this->assertEquals($commandeEntity->etat, $commandeDTO->etat);
-            $this->assertEquals($commandeEntity->type_livraison, $commandeDTO->type_livraison);
-            $this->assertEquals($commandeEntity->montant_total, $commandeDTO->montant);
-            $this->assertEquals(count($commandeEntity->items), count($commandeDTO->items));
+            $this->assertEquals($id, $commandeDTO->getId());
+            $this->assertEquals($commandeEntity->id_client, $commandeDTO->getMailClient());
+            $this->assertEquals($commandeEntity->etat, $commandeDTO->etat); // TODO: check if this is correct
+            $this->assertEquals($commandeEntity->type_livraison, $commandeDTO->getTypeLivraison());
+            $this->assertEquals($commandeEntity->montant_total, $commandeDTO->montant); // TODO: check if this is correct
+            $this->assertEquals(count($commandeEntity->items), count($commandeDTO->getItemsDTO()));
         }
 
 
