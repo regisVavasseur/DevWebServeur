@@ -55,6 +55,7 @@ services:
   #
   adminer:
     image: adminer
+    env_file: ./shop.env
     ports:
       - '8080:8080'
     networks:
