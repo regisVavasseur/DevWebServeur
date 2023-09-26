@@ -108,4 +108,9 @@ class CommandeDTO extends DTO
         $this->itemsDTO[] = $item;
     }
 
+    public function setMontant(float|int $total_price)
+    {
+        $this->montant = $total_price;
+    }
+
 }

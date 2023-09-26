@@ -1,13 +1,20 @@
 <?php
 
+namespace pizzashop\shop\domain\service\commande;
+
+use iInfoProduit;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Monolog\Logger;
 use pizzashop\shop\domain\dto\commande\CommandeDTO;
-use pizzashop\shop\domain\dto\item\ItemDTO;
+use pizzashop\shop\domain\dto\commande\ItemDTO;
+use pizzashop\shop\domain\entities\commande\Commande;
+use pizzashop\shop\domain\entities\commande\Item;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
-use Monolog\Logger;
+use ServiceCommandeInvalidException;
+use ServiceCommandeNotFoundException;
 
-class CommandeService implements iCommander
+class ServiceCommande implements iCommander
 {
 
     private iInfoProduit $iInfoProduit;
@@ -19,7 +26,7 @@ class CommandeService implements iCommander
         $this->logger = $logger;
     }
 
-    public function creerCommande(CommandeDTO $commandeDTO): CommandeDTO
+    public function creerCommande(CommandeDTO $commandeDTO): void
     {
         //function validerCommandeDeCommande(CommandeDTO) exercice 4
         if ($commandeDTO->getMailClient() == null || filter_var($commandeDTO->getMailClient(),FILTER_VALIDATE_EMAIL) || $commandeDTO->getTypeLivraison() == null) {
@@ -59,7 +66,6 @@ class CommandeService implements iCommander
 
         $this->logger->info('CommandeServiceLogger: CommandeService: Commande créée');
 
-        return $commandeDTO;
     }
 
     public function creerItem(ItemDTO $itemDTO) {
@@ -83,7 +89,7 @@ class CommandeService implements iCommander
         return $commande->toDTO();
     }
 
-    public function validerCommande(string $idCommande): CommandeDTO
+    public function validerCommande(string $idCommande): void
     {
         try {
             $commande = Commande::find($idCommande);
@@ -96,6 +102,5 @@ class CommandeService implements iCommander
         $commande->update(['etat' => Commande::ETAT_VALIDE]);
         //logger
         $commande->save();
-        return $commande->toDTO();
     }
 }

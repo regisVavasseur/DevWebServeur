@@ -1,5 +1,8 @@
 <?php
 
+namespace pizzashop\shop\domain\service\catalogue;
+
+use iInfoProduit;
 use pizzashop\shop\domain\dto\catalogue\ProduitDTO;
 
 class CatalogueService implements iInfoProduit

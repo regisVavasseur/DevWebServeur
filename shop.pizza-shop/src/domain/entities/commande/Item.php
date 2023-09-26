@@ -1,6 +1,8 @@
 <?php
 
-use pizzashop\shop\domain\dto\item\ItemDTO;
+namespace pizzashop\shop\domain\entities\commande;
+
+use pizzashop\shop\domain\dto\commande\ItemDTO;
 
 class Item extends \Illuminate\Database\Eloquent\Model
 {
