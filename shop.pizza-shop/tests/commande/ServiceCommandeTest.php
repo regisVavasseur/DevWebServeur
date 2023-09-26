@@ -28,7 +28,7 @@ class ServiceCommandeTest extends \PHPUnit\Framework\TestCase {
         $db->bootEloquent();
 
         self::$serviceProduits = new \CatalogueService();
-        self::$serviceCommande = new \CommandeService(self::$serviceProduits);
+        self::$serviceCommande = new \ServiceCommande(self::$serviceProduits);
         self::$faker = Factory::create('fr_FR');
         self::fillDB();
         print_r(self::$commandeIds);
