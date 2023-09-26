@@ -101,7 +101,7 @@ class ServiceCommandeTest extends \PHPUnit\Framework\TestCase {
             $this->assertEquals($commandeEntity->id_client, $commandeDTO->getMailClient());
             $this->assertEquals($commandeEntity->etat, $commandeDTO->etat); // TODO: check if this is correct
             $this->assertEquals($commandeEntity->type_livraison, $commandeDTO->getTypeLivraison());
-            $this->assertEquals($commandeEntity->montant_total, $commandeDTO->montant); // TODO: check if this is correct
+            $this->assertEquals($commandeEntity->montant_total, $commandeDTO->getMontant());
             $this->assertEquals(count($commandeEntity->items), count($commandeDTO->getItemsDTO()));
         }
 

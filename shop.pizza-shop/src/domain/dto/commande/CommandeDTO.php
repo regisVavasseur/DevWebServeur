@@ -100,6 +100,10 @@ class CommandeDTO extends DTO
         $this->itemsDTO = $itemsDTO;
     }
 
+    public function getMontant() : float {
+        return $this->montant;
+    }
+
     public function addItem(ItemDTO $item) : void {
         $this->itemsDTO[] = $item;
     }
