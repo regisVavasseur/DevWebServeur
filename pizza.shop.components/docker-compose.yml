@@ -66,33 +66,33 @@ services:
 ###  api api.auth : auth, check, refresh de token JWT
 ###  utilise sa propre base de données
 ######################################
-#  api.pizza-auth:
-#    image: 'canals/php:latest'
-#    env_file: ./auth.env
-#    ports:
-#      - '2780:80'
-#      - '2743:443'
-#    volumes:
-#      - ../auth.pizza-shop/public:/var/www/html
-#      - ../auth.pizza-shop:/var/www
-#    working_dir: /var/www
-#    networks:
-#      pizza-shop.net:
-#        aliases:
-#          - auth.pizza-shop.local
-#    depends_on:
-#      - pizza-shop.auth.db
+  api.pizza-auth:
+    image: 'canals/php:latest'
+    env_file: ./auth.env
+    ports:
+      - '2780:80'
+      - '2743:443'
+    volumes:
+      - ../auth.pizza-shop/public:/var/www/html
+      - ../auth.pizza-shop:/var/www
+    working_dir: /var/www
+    networks:
+      pizza-shop.net:
+        aliases:
+          - auth.pizza-shop.local
+    depends_on:
+      - pizza-shop.auth.db
 
-#  pizza-shop.auth.db:
-#    image: 'mariadb:latest'
-#    command: '--default-authentication-plugin=mysql_native_password --character-set-server=utf8 --collation-server=utf8_general_ci'
-#    env_file: ./auth.env
-#    ports:
-#      - '3308:3306'
-#    networks:
-#      - pizza-shop.net
-#    volumes:
-#      - ../auth.pizza-shop/sql:/var/sql
+  pizza-shop.auth.db:
+    image: 'mariadb:latest'
+    command: '--default-authentication-plugin=mysql_native_password --character-set-server=utf8 --collation-server=utf8_general_ci'
+    env_file: ./auth.env
+    ports:
+      - '3308:3306'
+    networks:
+      - pizza-shop.net
+    volumes:
+      - ../auth.pizza-shop/sql:/var/sql
 
  
 
