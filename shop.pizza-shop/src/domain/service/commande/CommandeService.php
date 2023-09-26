@@ -2,6 +2,7 @@
 
 use pizzashop\shop\domain\dto\commande\CommandeDTO;
 use pizzashop\shop\domain\dto\item\ItemDTO;
+use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use Monolog\Logger;
 
@@ -9,12 +10,12 @@ class CommandeService implements iCommander
 {
 
     private iInfoProduit $iInfoProduit;
-    private Logger $logger;
+    private LoggerInterface $logger;
 
-    public function __construct(iInfoProduit $serviceinfoProduit)
+    public function __construct(iInfoProduit $serviceinfoProduit, LoggerInterface $logger)
     {
         $this->iInfoProduit = $serviceinfoProduit;
-        $this->logger = new Logger('CommandeServiceLogger');
+        $this->logger = $logger;
     }
     
 

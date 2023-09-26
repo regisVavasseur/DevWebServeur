@@ -100,7 +100,7 @@ class CommandeDTO extends DTO
         $this->itemsDTO = $itemsDTO;
     }
 
-    public function addItem (ItemDTO $item) : void {
+    public function addItem(ItemDTO $item) : void {
         $this->itemsDTO[] = $item;
     }
 
