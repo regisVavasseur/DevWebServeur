@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Monolog\Logger;
 use pizzashop\shop\domain\dto\commande\CommandeDTO;
 use pizzashop\shop\domain\dto\commande\ItemDTO;
+use pizzashop\shop\domain\entities\catalogue\Produit;
 use pizzashop\shop\domain\entities\commande\Commande;
 use pizzashop\shop\domain\entities\commande\Item;
 use Psr\Log\LoggerInterface;
@@ -26,21 +27,54 @@ class ServiceCommande implements iCommander
         $this->logger = $logger;
     }
 
-    public function creerCommande(CommandeDTO $commandeDTO): void
+    public function creerCommande(CommandeDTO $commandeDTO): CommandeDTO
     {
-        //function validerCommandeDeCommande(CommandeDTO) exercice 4
-        if ($commandeDTO->getMailClient() == null || filter_var($commandeDTO->getMailClient(),FILTER_VALIDATE_EMAIL) || $commandeDTO->getTypeLivraison() == null) {
+        //exercice 4 - Validation infos commande
+
+        $emailClient = $commandeDTO->getMailClient();
+        $typeLivraison = $commandeDTO->getTypeLivraison();
+        $arrayItems = $commandeDTO->getItemsDTO();
+
+        //• email présent et valide
+
+        if (!filter_var($emailClient, FILTER_VALIDATE_EMAIL)) {
             throw new ServiceCommandeInvalidException();
-        } else {
-            $emailClient = $commandeDTO->getMailClient();
-            $typeLivraison = $commandeDTO->getTypeLivraison();
         }
 
-        if ($commandeDTO->getItemsDTO() == null) {
+        //• type_livraison présent et valeur conforme (liste),
+
+        if (!in_array($typeLivraison, [Commande::LIVRAISON_SUR_PLACE, Commande::LIVRAISON_A_EMPORTER, Commande::LIVRAISON_A_DOMICILE])) {
             throw new ServiceCommandeInvalidException();
-        }else {
-            $arrayItems = $commandeDTO->getItemsDTO();
         }
+
+        //• tableau d'items présent et non vide,
+
+        if (empty($arrayItems)) {
+            throw new ServiceCommandeInvalidException();
+        }
+
+        //• pour chaque item :
+            //◦ numéro, quantité : présents, valeurs entières positives
+            //◦ taille : présent, valeur conforme (liste)
+
+        foreach ($arrayItems as $item) {
+            // Validation des champs obligatoires
+            if (empty($item->getNumero()) || empty($item->getQuantite()) || empty($item->getTaille())) {
+                throw new ServiceCommandeInvalidException();
+            }
+            // Validation des valeurs entières positives
+            if (!is_int($item->getQuantite()) || $item->getQuantite() < 0) {
+                throw new ServiceCommandeInvalidException();
+            }
+            if (!is_int($item->getNumero()) || $item->getNumero() < 0) {
+                throw new ServiceCommandeInvalidException();
+            }
+            // Validation de la taille de l'item | Constantes dans Produit.php
+            if (!in_array($item->getTaille(), [Produit::TAILLE_NORMALE, Produit::TAILLE_GRANDE])) {
+                throw new ServiceCommandeInvalidException();
+            }
+        }
+
         //fin exo4
 
         $commande = new Commande();
@@ -66,6 +100,8 @@ class ServiceCommande implements iCommander
 
         $this->logger->info('CommandeServiceLogger: CommandeService: Commande créée');
 
+        return $commande->toDTO();
+
     }
 
     public function creerItem(ItemDTO $itemDTO) {
@@ -89,7 +125,7 @@ class ServiceCommande implements iCommander
         return $commande->toDTO();
     }
 
-    public function validerCommande(string $idCommande): void
+    public function validerCommande(string $idCommande): CommandeDTO
     {
         try {
             $commande = Commande::find($idCommande);
@@ -102,5 +138,9 @@ class ServiceCommande implements iCommander
         $commande->update(['etat' => Commande::ETAT_VALIDE]);
         //logger
         $commande->save();
+
+        $this->logger->info('CommandeServiceLogger: CommandeService: Commande validée');
+
+        return $commande->toDTO();
     }
 }
