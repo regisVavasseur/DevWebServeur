@@ -7,7 +7,9 @@ $app = AppFactory::create();
 $app->addBodyParsingMiddleware();
 
 //gestionnaire d'erreur
-$app->addErrorMiddleware(true, false, false);
+$errorMiddleware = $app->addErrorMiddleware(true, false, false);
+$errorHandler = $errorMiddleware->getDefaultErrorHandler();
+$errorHandler->forceContentType('application/json');
 
 // Initialisation de Eloquent
 Eloquent::init(__DIR__ . DIRECTORY_SEPARATOR .'catalog.db.ini');
