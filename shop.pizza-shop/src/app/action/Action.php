@@ -2,10 +2,10 @@
 
 namespace pizzashop\shop\app\contollers;
 
-use Slim\Psr7\Request;
-use Slim\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 interface Action
 {
-    public function __invoke(Request $request, Response $response, array $args);
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args);
 }

@@ -13,13 +13,13 @@ use Slim\Exception\HttpNotFoundException;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 
-class AccederCommandeAction
+class PatchValiderCommandeAction
 {
     public function __invoke(Request $request, Response $response, array $args)
     {
         $id = $args['id'] ?? 0;
 
-        $data = [];
+        $dataJson = [];
 
         $logger = new Logger('app.logger');
         $logger->pushHandler(new StreamHandler(__DIR__ . '/../../../logs/errors.log', Level::Error));
@@ -31,12 +31,12 @@ class AccederCommandeAction
         } catch (ServiceCommandeInvalidException $e) {
             throw new HttpNotFoundException($request, $e->getMessage());
         }
-        $data['type'] = 'commande';
-        $data['status'] = 'success';
-        $data['commande'] = $service->accederCommande($id);
+        $dataJson['type'] = 'commande';
+        $dataJson['status'] = 'success';
+        $dataJson['commande'] = $service->accederCommande($id);
 
 
-        return json_encode($data);
+        return $response->getBody()->write(json_encode($dataJson));
 
 
     }

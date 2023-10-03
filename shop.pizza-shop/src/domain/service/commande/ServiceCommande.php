@@ -117,9 +117,9 @@ class ServiceCommande implements iCommander
     public function accederCommande(string $idCommande): CommandeDTO
     {
         try {
-            $commande = Commande::findOrFail($idCommande);
+            $commande = Commande::where('id', $idCommande)->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            throw new ServiceCommandeNotFoundException($e);
+            throw new ServiceCommandeNotFoundException("Commande inexistante");
         }
         // $commande
         return $commande->toDTO();
@@ -128,12 +128,12 @@ class ServiceCommande implements iCommander
     public function validerCommande(string $idCommande): CommandeDTO
     {
         try {
-            $commande = Commande::find($idCommande);
+            $commande = Commande::where('id', $idCommande)->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            throw new ServiceCommandeInvalidException();
+            throw new ServiceCommandeInvalidException("Commande inexistante");
         }
         if ($commande->etat > Commande::ETAT_VALIDE) {
-            throw new ServiceCommandeInvalidException();
+            throw new ServiceCommandeInvalidException("Commande déjà validée");
         }
         $commande->update(['etat' => Commande::ETAT_VALIDE]);
         //logger

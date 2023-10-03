@@ -7,14 +7,17 @@ use Monolog\Level;
 use Monolog\Logger;
 use pizzashop\shop\domain\service\catalogue\CatalogueService;
 use pizzashop\shop\domain\service\commande\ServiceCommande;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use ServiceCommandeNotFoundException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
+use Slim\Routing\RouteContext;
 
 class GetCommandeAction implements Action
 {
-    public function __invoke(Request $request, Response $response, array $args)
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $id = $args['id'] ?? 0;
 
@@ -29,20 +32,18 @@ class GetCommandeAction implements Action
             throw new HttpNotFoundException($request, $e->getMessage());
         }
 
+        $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+
         $responseJson = [
             'type' => 'resource',
             'commande' => $commandeDto,
             'links' => [
-                'self' => [
-                    'href' => '/commandes/'.$commandeDto->getId()
-                ],
-                'valider' => [
-                    'href' => '/commandes/'.$commandeDto->getId()
-                ]
+                'self' => ['href' => $routeParser->urlFor('getCommande', ['id' => $commandeDto->getId()])],
+                'valider' => ['href' => $routeParser->urlFor('patchValiderCommande', ['id' => $commandeDto->getId()])],
             ],
         ];
 
-        $response->getBody()->write(json_encode($responseJson));
+        return $response->getBody()->write(json_encode($responseJson));
 
     }
 }
