@@ -17,9 +17,10 @@ class CommandeDTO extends DTO
     private float $montant;
     private int $delai;
     private array $itemsDTO;
+    private int $etat;
 
 
-    public function __construct(string $id, string $date, int $type_livraison, string $mail_client, float $montant, int $delai, array $itemsDTO)
+    public function __construct(string $id, string $date, int $type_livraison, string $mail_client, float $montant, int $delai, array $itemsDTO, int $etat = 1)
     {
         $this->id = $id;
         $this->date = $date;
@@ -28,6 +29,7 @@ class CommandeDTO extends DTO
         $this->montant = $montant;
         $this->delai = $delai;
         $this->itemsDTO = $itemsDTO;
+        $this->etat = $etat;
     }
 
     public function getId(): string
@@ -111,6 +113,16 @@ class CommandeDTO extends DTO
     public function setMontant(float|int $total_price)
     {
         $this->montant = $total_price;
+    }
+
+    public function getEtat(): int
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(int $etat): void
+    {
+        $this->etat = $etat;
     }
 
 }
