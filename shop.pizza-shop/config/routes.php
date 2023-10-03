@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use pizzashop\shop\app\contollers\GetCommandeAction;
+use pizzashop\shop\app\action\GetCommandeAction;
 use pizzashop\shop\app\controllers\PatchValiderCommandeAction;
 
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace pizzashop\shop\app\contollers;
+namespace pizzashop\shop\app\action;
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
@@ -11,11 +11,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ServiceCommandeNotFoundException;
 use Slim\Exception\HttpNotFoundException;
-use Slim\Psr7\Request;
-use Slim\Psr7\Response;
 use Slim\Routing\RouteContext;
 
-class GetCommandeAction implements Action
+class GetCommandeAction extends Action
 {
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {

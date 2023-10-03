@@ -1,11 +1,20 @@
 <?php
 
-namespace pizzashop\shop\app\contollers;
+namespace pizzashop\shop\app\action;
 
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-interface Action
+abstract class Action
 {
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args);
+
+    private ContainerInterface $container;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    abstract function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args);
 }

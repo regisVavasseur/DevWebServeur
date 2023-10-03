@@ -5,17 +5,17 @@ namespace pizzashop\shop\app\controllers;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
+use pizzashop\shop\app\action\Action;
 use pizzashop\shop\domain\service\catalogue\CatalogueService;
 use pizzashop\shop\domain\service\commande\ServiceCommande;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use ServiceCommandeInvalidException;
-use ServiceCommandeNotFoundException;
 use Slim\Exception\HttpNotFoundException;
-use Slim\Psr7\Request;
-use Slim\Psr7\Response;
 
-class PatchValiderCommandeAction
+class PatchValiderCommandeAction extends Action
 {
-    public function __invoke(Request $request, Response $response, array $args)
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $id = $args['id'] ?? 0;
 
