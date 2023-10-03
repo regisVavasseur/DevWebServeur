@@ -9,7 +9,7 @@ use Psr\Http\Message\ServerRequestInterface;
 abstract class Action
 {
 
-    private ContainerInterface $container;
+    protected ContainerInterface $container;
 
     public function __construct(ContainerInterface $container)
     {
