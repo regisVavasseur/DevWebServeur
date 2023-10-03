@@ -12,7 +12,7 @@ use Slim\Exception\HttpNotFoundException;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 
-class GetCommandeAction
+class GetCommandeAction implements Action
 {
     public function __invoke(Request $request, Response $response, array $args)
     {
