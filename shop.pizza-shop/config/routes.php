@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use pizzashop\shop\app\action\GetCommandeAction;
-use pizzashop\shop\app\controllers\PatchValiderCommandeAction;
+use pizzashop\shop\app\action\PatchValiderCommandeAction;
 
 
 return function( \Slim\App $app):void {

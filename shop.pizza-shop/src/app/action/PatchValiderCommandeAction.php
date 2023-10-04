@@ -1,6 +1,6 @@
 <?php
 
-namespace pizzashop\shop\app\controllers;
+namespace pizzashop\shop\app\action;
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
