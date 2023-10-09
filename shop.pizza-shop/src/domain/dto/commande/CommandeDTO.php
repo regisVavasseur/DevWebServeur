@@ -4,7 +4,6 @@ namespace pizzashop\shop\domain\dto\commande;
 
 use PhpParser\Node\Expr\Cast\Double;
 use pizzashop\shop\domain\dto\DTO;
-use pizzashop\shop\domain\dto\item\ItemDTO;
 use function DI\add;
 
 class CommandeDTO extends DTO

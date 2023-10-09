@@ -20,17 +20,26 @@ class Commande extends \Illuminate\Database\Eloquent\Model
     protected $connection = 'commande';
     protected $table = 'commande';
     protected $primaryKey = 'id';
+    protected $keyType = 'string';
     public $timestamps = false;
     protected $fillable = [ 'delai, date_commande, type_livraison, etat, montant_total, id_client'];
 
     public function calculerMontantTotal(){}
 
     public function items() {
-        $this->hasMany(Item::class, 'commande_id');
+        return $this->hasMany(Item::class, 'commande_id');
     }
 
     public function toDTO() : CommandeDTO{
-        $commandeDTO = new CommandeDTO($this->id, $this->date_commande, $this->type_livraison ,$this->mail_client, $this->montant_total, $this->delai, [], $this->etat);
+        $commandeDTO = new CommandeDTO(
+            $this->id,
+            $this->date_commande,
+            $this->type_livraison ,
+            $this->mail_client,
+            $this->montant_total,
+            $this->delai, [],
+            $this->etat
+        );
         foreach ($this->items as $item) {
             $commandeDTO->addItem($item->toDTO());
         }

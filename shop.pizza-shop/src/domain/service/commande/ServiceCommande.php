@@ -2,7 +2,6 @@
 
 namespace pizzashop\shop\domain\service\commande;
 
-use iInfoProduit;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Monolog\Logger;
 use pizzashop\shop\domain\dto\commande\CommandeDTO;
@@ -10,10 +9,10 @@ use pizzashop\shop\domain\dto\commande\ItemDTO;
 use pizzashop\shop\domain\entities\catalogue\Produit;
 use pizzashop\shop\domain\entities\commande\Commande;
 use pizzashop\shop\domain\entities\commande\Item;
+use pizzashop\shop\domain\service\catalogue\iInfoProduit;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
-use ServiceCommandeInvalidException;
-use ServiceCommandeNotFoundException;
+
 
 class ServiceCommande implements iCommander
 {
