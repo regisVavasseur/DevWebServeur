@@ -146,7 +146,7 @@ class ServiceCommande implements iCommander
         if ($commande->etat > Commande::ETAT_VALIDE) {
             throw new ServiceCommandeInvalidException("Commande déjà validée");
         }
-        $commande->update(['etat' => Commande::ETAT_VALIDE]);
+        $commande->etat = Commande::ETAT_VALIDE;
         //logger
         $commande->save();
 

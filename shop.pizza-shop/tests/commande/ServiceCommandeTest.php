@@ -163,7 +163,13 @@ class ServiceCommandeTest extends \PHPUnit\Framework\TestCase {
             $this->assertEquals(count($commandeEntity->items), count($commandeDTO->getItemsDTO()));
         }
 
+    }
 
+    public function testValiderCommande(){
+        foreach (self::$commandeIds as $id){
+            $commandeDTO = self::$serviceCommande->validerCommande($id);
+            $this->assertEquals(Commande::ETAT_VALIDE, $commandeDTO->getEtat());
+        }
     }
 
 }
