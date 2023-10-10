@@ -7,7 +7,7 @@ use pizzashop\shop\app\action\PatchValiderCommandeAction;
 
 return function( \Slim\App $app):void {
 
-    $app->post('/commandes[/]', \pizzashop\shop\app\actions\CreerCommandeAction::class)->setName('creer_commande');
+    $app->post('/commandes[/]', CreerCommandeAction::class)->setName('creer_commande');
 
     $app->patch('/commandes/{id_commande}[/]', PatchValiderCommandeAction::class)->setName('commande');
 

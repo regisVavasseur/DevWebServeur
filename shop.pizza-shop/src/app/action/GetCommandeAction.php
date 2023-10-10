@@ -2,20 +2,17 @@
 
 namespace pizzashop\shop\app\action;
 
-use Monolog\Handler\StreamHandler;
-use Monolog\Level;
-use Monolog\Logger;
-use pizzashop\shop\domain\service\catalogue\CatalogueService;
-use pizzashop\shop\domain\service\commande\ServiceCommande;
+use pizzashop\shop\domain\service\commande\ServiceCommandeNotFoundException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use ServiceCommandeNotFoundException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Routing\RouteContext;
 
 class GetCommandeAction extends Action
 {
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): int
     {
         $id = $args['id'] ?? 0;
 
@@ -23,6 +20,8 @@ class GetCommandeAction extends Action
             $service = $this->container->get('commande.service');
             $commandeDto = $service->accederCommande($id);
         } catch (ServiceCommandeNotFoundException $e) {
+            throw new HttpNotFoundException($request, $e->getMessage());
+        } catch (NotFoundExceptionInterface|ContainerExceptionInterface $e) {
             throw new HttpNotFoundException($request, $e->getMessage());
         }
 
