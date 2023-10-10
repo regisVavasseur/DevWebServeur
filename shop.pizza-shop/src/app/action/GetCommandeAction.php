@@ -34,23 +34,18 @@ class GetCommandeAction
             throw new HttpNotFoundException($request, "test1".$e->getMessage());
         }
 
-        $routeParser = RouteContext::fromRequest($request)->getRouteParser();
-
         $responseJson = [
             'type' => 'resource',
             'commande' => $commandeDto->__toString(),
-//            'links' => [
-//                'self' => ['href' => $routeParser->urlFor('getCommande', ['id' => $commandeDto->getId()])],
-//                'valider' => ['href' => $routeParser->urlFor('patchValiderCommande', ['id' => $commandeDto->getId()])],
-//            ],
+            'links' => [
+                'self' => RouteContext::fromRequest($request)->getRouteParser()->urlFor('commandes', ['id' => $commandeDto->getId()]),
+                'valider' => RouteContext::fromRequest($request)->getRouteParser()->urlFor('patch_commandes', ['id_commande' => $commandeDto->getId()])
+            ]
         ];
 
         $response->getBody()->write(json_encode($responseJson));
 
         return $response;
-
-//        $response->getBody()->write(json_encode($responseJson));
-//        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
 
     }
 }

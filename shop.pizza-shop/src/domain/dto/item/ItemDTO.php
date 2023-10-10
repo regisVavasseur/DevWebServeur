@@ -79,4 +79,17 @@ class ItemDTO extends DTO
         $this->prix = $prix;
     }
 
+    //create function toString
+    public function __toString(): string
+    {
+        return json_encode([
+            'id' => $this->id,
+            'numero' => $this->numero,
+            'libelle' => $this->libelle,
+            'taille' => $this->taille,
+            'quantite' => $this->quantite,
+            'prix' => $this->prix
+        ]);
+    }
+
 }

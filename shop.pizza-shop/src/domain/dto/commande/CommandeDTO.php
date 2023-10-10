@@ -123,9 +123,24 @@ class CommandeDTO extends DTO
         $this->etat = $etat;
     }
 
+    //create function toString
     public function __toString(): string
     {
-        return "CommandeDTO [id=" . $this->id . ", date=" . $this->date . ", type_livraison=" . $this->type_livraison . ", mail_client=" . $this->mail_client . ", montant=" . $this->montant . ", delai=" . $this->delai . ", itemsDTO=" . $this->itemsDTO[0]->getNumero() . ", etat=" . $this->etat . "]";
+        $items = [];
+        foreach ($this->itemsDTO as $item) {
+            $items[] = $item->__toString();
+        }
+        return json_encode([
+            'id' => $this->id,
+            'date' => $this->date,
+            'type_livraison' => $this->type_livraison,
+            'mail_client' => $this->mail_client,
+            'montant' => $this->montant,
+            'delai' => $this->delai,
+            'items' => $items,
+            'etat' => $this->etat
+        ]);
     }
+
 
 }
