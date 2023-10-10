@@ -8,8 +8,6 @@ $app->addBodyParsingMiddleware();
 
 $app->addRoutingMiddleware();
 
-
-
 //gestionnaire d'erreur
 $errorMiddleware = $app->addErrorMiddleware(true, false, false);
 $errorHandler = $errorMiddleware->getDefaultErrorHandler();

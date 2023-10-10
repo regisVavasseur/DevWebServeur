@@ -9,7 +9,7 @@ return function( \Slim\App $app):void {
 
     $app->post('/commandes[/]', CreerCommandeAction::class)->setName('creer_commande');
 
-    $app->patch('/commandes/{id_commande}[/]', PatchValiderCommandeAction::class)->setName('commande');
+    $app->patch('/commandes/{id_commande}[/]', PatchValiderCommandeAction::class)->setName('patch_commandes');
 
     $app->get('/commandes/{id}[/]', GetCommandeAction::class)->setName('commandes');
 };
