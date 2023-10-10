@@ -10,6 +10,6 @@ return [
     },
 
     PatchValiderCommandeAction::class => function(ContainerInterface $container) {
-    return new PatchValiderCommandeAction($container->get('commande.service'));
+    return new PatchValiderCommandeAction($container->get('commande.service'), $container->get('logger'));
     }
 ];

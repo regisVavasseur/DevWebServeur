@@ -152,7 +152,6 @@ class ServiceCommande implements iCommander
 
         $this->logger->info('CommandeServiceLogger: CommandeService: Commande validée');
 
-
         return $commande->toDTO();
     }
 }
