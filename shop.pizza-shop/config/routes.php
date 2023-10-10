@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 use pizzashop\shop\app\action\GetCommandeAction;
 use pizzashop\shop\app\action\PatchValiderCommandeAction;
+use pizzashop\shop\app\action\PostCreerCommandeAction;
+use Slim\App;
 
 
-return function( \Slim\App $app):void {
+return function( App $app):void {
 
-    $app->post('/commandes[/]', CreerCommandeAction::class)->setName('creer_commande');
+    $app->post('/commandes[/]', PostCreerCommandeAction::class)->setName('creer_commande');
 
     $app->patch('/commandes/{id_commande}[/]', PatchValiderCommandeAction::class)->setName('patch_commandes');
 

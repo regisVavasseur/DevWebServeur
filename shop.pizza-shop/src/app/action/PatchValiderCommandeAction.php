@@ -5,9 +5,7 @@ namespace pizzashop\shop\app\action;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
-use pizzashop\shop\domain\service\catalogue\CatalogueService;
 use pizzashop\shop\domain\service\commande\iCommander;
-use pizzashop\shop\domain\service\commande\ServiceCommande;
 use pizzashop\shop\domain\service\commande\ServiceCommandeInvalidException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -44,8 +42,7 @@ class PatchValiderCommandeAction
 
         $response->getBody()->write(json_encode($dataJson));
 
-        return $response;
-
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
 
     }
 }
