@@ -29,14 +29,14 @@ class GetCommandeAction
             $service = $this->commander;
             $commandeDto = $service->accederCommande($id);
         } catch (ServiceCommandeNotFoundException $e) {
-            throw new HttpNotFoundException($request, 'test'.$e->getMessage());
+            throw new HttpNotFoundException($request, $e->getMessage());
         } catch (NotFoundExceptionInterface|ContainerExceptionInterface $e) {
-            throw new HttpNotFoundException($request, "test1".$e->getMessage());
+            throw new HttpNotFoundException($request, $e->getMessage());
         }
 
         $responseJson = [
             'type' => 'resource',
-            'commande' => $commandeDto->__toString(),
+            'commande' => $commandeDto->toArray(),
             'links' => [
                 'self' => RouteContext::fromRequest($request)->getRouteParser()->urlFor('commandes', ['id' => $commandeDto->getId()]),
                 'valider' => RouteContext::fromRequest($request)->getRouteParser()->urlFor('patch_commandes', ['id_commande' => $commandeDto->getId()])

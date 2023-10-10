@@ -80,16 +80,16 @@ class ItemDTO extends DTO
     }
 
     //create function toString
-    public function __toString(): string
+    public function toArray(): array
     {
-        return json_encode([
+        return [
             'id' => $this->id,
             'numero' => $this->numero,
             'libelle' => $this->libelle,
             'taille' => $this->taille,
             'quantite' => $this->quantite,
             'prix' => $this->prix
-        ]);
+        ];
     }
 
 }

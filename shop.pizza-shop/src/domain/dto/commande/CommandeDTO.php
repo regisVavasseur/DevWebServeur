@@ -70,16 +70,6 @@ class CommandeDTO extends DTO
         $this->mail_client = $mail_client;
     }
 
-    public function getPrixTotal(): float
-    {
-        return $this->prix_total;
-    }
-
-    public function setPrixTotal(float $prix_total): void
-    {
-        $this->prix_total = $prix_total;
-    }
-
     public function getDelai(): int
     {
         return $this->delai;
@@ -123,14 +113,14 @@ class CommandeDTO extends DTO
         $this->etat = $etat;
     }
 
-    //create function toString
-    public function __toString(): string
+    public function toArray(): array
     {
         $items = [];
         foreach ($this->itemsDTO as $item) {
-            $items[] = $item->__toString();
+            $items[] = $item->toArray();
         }
-        return json_encode([
+
+        return [
             'id' => $this->id,
             'date' => $this->date,
             'type_livraison' => $this->type_livraison,
@@ -139,7 +129,7 @@ class CommandeDTO extends DTO
             'delai' => $this->delai,
             'items' => $items,
             'etat' => $this->etat
-        ]);
+        ];
     }
 
 
