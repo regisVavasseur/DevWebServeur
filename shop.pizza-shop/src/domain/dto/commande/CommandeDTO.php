@@ -124,13 +124,13 @@ class CommandeDTO extends DTO
     }
 
     //create function toString
-    public function __toString(): string
+        public function __toStringArray(): array
     {
         $items = [];
         foreach ($this->itemsDTO as $item) {
-            $items[] = $item->__toString();
+            $items[] = $item->__toStringArray();
         }
-        return json_encode([
+        return [
             'id' => $this->id,
             'date' => $this->date,
             'type_livraison' => $this->type_livraison,
@@ -139,7 +139,7 @@ class CommandeDTO extends DTO
             'delai' => $this->delai,
             'items' => $items,
             'etat' => $this->etat
-        ]);
+        ];
     }
 
 

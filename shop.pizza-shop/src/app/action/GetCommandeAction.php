@@ -36,7 +36,7 @@ class GetCommandeAction
 
         $responseJson = [
             'type' => 'resource',
-            'commande' => $commandeDto->__toString(),
+            'commande' => $commandeDto->__toStringArray(),
             'links' => [
                 'self' => RouteContext::fromRequest($request)->getRouteParser()->urlFor('commandes', ['id' => $commandeDto->getId()]),
                 'valider' => RouteContext::fromRequest($request)->getRouteParser()->urlFor('patch_commandes', ['id_commande' => $commandeDto->getId()])
