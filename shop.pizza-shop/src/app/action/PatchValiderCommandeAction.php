@@ -39,7 +39,7 @@ class PatchValiderCommandeAction
         }
         $dataJson['type'] = 'commande';
         $dataJson['status'] = 'success';
-        $dataJson['commande'] = $service->accederCommande($id)->__toStringArray();
+        $dataJson['commande'] = $service->accederCommande($id)->toArray();
 
 
         $response->getBody()->write(json_encode($dataJson));
