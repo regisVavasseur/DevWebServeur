@@ -24,7 +24,13 @@ class Commande extends \Illuminate\Database\Eloquent\Model
     public $timestamps = false;
     protected $fillable = [ 'delai, date_commande, type_livraison, etat, montant_total, id_client'];
 
-    public function calculerMontantTotal(){}
+    public function calculerMontantTotal() {
+        $montantTotal = 0;
+        foreach ($this->items() as $item) {
+            $montantTotal += ($item->tarif * $item->quantite);
+        }
+        $this->montant_total = $montantTotal;
+    }
 
     public function items() {
         return $this->hasMany(Item::class, 'commande_id');

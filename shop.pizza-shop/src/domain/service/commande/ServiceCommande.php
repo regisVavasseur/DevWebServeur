@@ -3,10 +3,10 @@
 namespace pizzashop\shop\domain\service\commande;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Monolog\Logger;
 use pizzashop\shop\domain\dto\commande\CommandeDTO;
-use pizzashop\shop\domain\dto\commande\ItemDTO;
+use pizzashop\shop\domain\dto\item\ItemDTO;
 use pizzashop\shop\domain\entities\catalogue\Produit;
+use pizzashop\shop\domain\entities\catalogue\Taille;
 use pizzashop\shop\domain\entities\commande\Commande;
 use pizzashop\shop\domain\entities\commande\Item;
 use pizzashop\shop\domain\service\catalogue\iInfoProduit;
@@ -32,17 +32,24 @@ class ServiceCommande implements iCommander
 
         $emailClient = $commandeDTO->getMailClient();
         $typeLivraison = $commandeDTO->getTypeLivraison();
+        $delai = $commandeDTO->getDelai();
         $arrayItems = $commandeDTO->getItemsDTO();
 
         //• email présent et valide
-
         if (!filter_var($emailClient, FILTER_VALIDATE_EMAIL)) {
+            print "email invalide: (" . $emailClient . ")";
             throw new ServiceCommandeInvalidException();
         }
 
         //• type_livraison présent et valeur conforme (liste),
 
         if (!in_array($typeLivraison, [Commande::LIVRAISON_SUR_PLACE, Commande::LIVRAISON_A_EMPORTER, Commande::LIVRAISON_A_DOMICILE])) {
+            throw new ServiceCommandeInvalidException();
+        }
+
+        //• delai présent et valeur conforme supérieur à 0,
+
+        if (!is_int($delai) || $delai > 0) {
             throw new ServiceCommandeInvalidException();
         }
 
@@ -77,19 +84,19 @@ class ServiceCommande implements iCommander
         //fin exo4
 
         $commande = new Commande();
-        $commande->id = Uuid::uuid4()->toString();
-        $commande->idClient = $emailClient;
-        $commande->date_commande = date("Y-m-d H:i:s");
+        $commande->id = $commandeDTO->getId();
+        $commande->mail_client = $emailClient;
+        $commande->date_commande = $commandeDTO->getDate();
         $commande->type_livraison = $typeLivraison;
-        $commande->etat = $commande::ETAT_CREE;
-        $commande->delai = 0;
+        $commande->etat = $commandeDTO->getEtat();
+        $commande->delai = $delai;
 
         $total_price = 0;
 
         foreach ($arrayItems as $item) {
             $total_price += ($item->getPrix() * $item->getQuantite());
 
-            $this->creerItem($item);
+            $this->creerItem($item, $commande->id);
         }
 
         $commande->montant_total = $total_price;
@@ -103,12 +110,17 @@ class ServiceCommande implements iCommander
 
     }
 
-    public function creerItem(ItemDTO $itemDTO) {
+    public function creerItem(ItemDTO $itemDTO, string $uuidCommande): void {
         $item = new Item();
 
         $item->numero = $itemDTO->getNumero();
+        $item->libelle = $itemDTO->getLibelle();
         $item->taille = $itemDTO->getTaille();
+        $item->libelle_taille = Taille::where('id', $itemDTO->getTaille())->firstOrFail()->libelle;
         $item->quantite = $itemDTO->getQuantite();
+        $item->tarif = $itemDTO->getPrix();
+
+        $item->commande_id = $uuidCommande;
 
         $item->save();
     }

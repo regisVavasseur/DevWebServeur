@@ -2,12 +2,14 @@
 
 namespace pizzashop\tests\commande;
 
+use Faker\Factory;
+use Illuminate\Database\Capsule\Manager as DB;
+use pizzashop\shop\domain\dto\commande\CommandeDTO;
+use pizzashop\shop\domain\dto\item\ItemDTO;
+use pizzashop\shop\domain\entities\catalogue\Produit;
 use pizzashop\shop\domain\entities\catalogue\Taille;
 use pizzashop\shop\domain\entities\commande\Commande;
-use Faker\Factory;
 use pizzashop\shop\domain\entities\commande\Item;
-use PHPUnit\Framework\Attributes\DataProvider;
-use Illuminate\Database\Capsule\Manager as DB;
 use pizzashop\shop\domain\service\catalogue\CatalogueService;
 use pizzashop\shop\domain\service\commande\ServiceCommande;
 use Ramsey\Uuid\Uuid;
@@ -54,53 +56,92 @@ class ServiceCommandeTest extends \PHPUnit\Framework\TestCase {
         }
     }
     private static function fillDB() {
+        //Create 2 to 5 commandes DTO with faker
+        //Create 1 to 5 items DTO for each commande DTO with faker
+        //Use the service to create the commandes with creerCommande(CommandeDTO): CommandeDTO
+        //Verify that the returned CommandeDTO is the same as the one created
 
-        for ($i = 0; $i < 5; $i++) {
-            $uuidCommande = self::$faker->uuid;
+        for ($i = 0; $i < self::$faker->numberBetween(2, 5); $i++) {
+            $commandeDTO = new CommandeDTO(
+                Uuid::uuid4()->toString(), //Commande id
 
-            $commande = new Commande();
-            $commande->id = $uuidCommande;
-            $commande->type_livraison = self::$faker->randomElement([
-                Commande::LIVRAISON_SUR_PLACE, Commande::LIVRAISON_A_EMPORTER, Commande::LIVRAISON_A_DOMICILE
-            ]);
+                self::$faker->dateTimeBetween('-1 year', 'now')
+                    ->format('Y-m-d H:i:s'), //Commande date
 
-            $commande->date_commande = self::$faker->dateTimeBetween('-1 year', 'now')
-                                                            ->format('Y-m-d H:i:s');
-            $commande->etat = Commande::ETAT_CREE;
-            $commande->mail_client = self::$faker->firstName . self::$faker->lastName . '@' . self::$faker->freeEmailDomain;
+                self::$faker->randomElement([
+                    Commande::LIVRAISON_SUR_PLACE, Commande::LIVRAISON_A_EMPORTER, Commande::LIVRAISON_A_DOMICILE
+                ]), //Commande type_livraison
 
-            self::$commandeIds[] = $uuidCommande;
+                self::$faker->email(), //Commande mail_client
 
-            $commande->save();
+                0, //Commande montant
 
-            /**
-             * des items
-             */
-            $nbItems = self::$faker->numberBetween(1, 5);
-            for ($j = 0; $j < $nbItems; $j++) {
-                $item = new Item();
-                $numero = self::$faker->numberBetween(1, 10); //Selection d'un produit
+                0, //Commande delai
 
-                $taille = Taille::where('id', self::$faker->numberBetween(1, 2))
-                            ->firstOrFail();
+                [], //Commande itemsDTO
 
-                $produit = self::$serviceProduits->getProduit($numero, $taille->id);
+                Commande::ETAT_CREE //Commande etat
 
-                $item->numero = $numero;
-                $item->libelle = $produit->libelle_produit;
-                $item->taille = $taille->id;
-                $item->libelle_taille = $taille->libelle;
-                $item->tarif = $produit->tarif;
-                $item->quantite = self::$faker->numberBetween(1, 5);
-                $item->commande_id = $uuidCommande;
+            );
 
-                $item->save();
+            for ($j = 0; $j < self::$faker->numberBetween(1, 5); $j++) {
 
-                self::$itemIds[] = $item->id;
+                $Random_Produit = self::$serviceProduits->getProduit(
+                    self::$faker->numberBetween(1, 10),
+                    self::$faker->numberBetween(1, 2)
+                );
+
+                $itemDTO = new ItemDTO(
+                    Produit::where('numero', $Random_Produit->numero_produit)
+                        ->firstOrFail()->id, //Item id
+
+                    $Random_Produit->numero_produit, //Item numero
+
+                    $Random_Produit->libelle_produit, //Item libelle
+
+                    Taille::where('libelle', $Random_Produit->libelle_taille)
+                        ->firstOrFail()->id, //Item taille
+
+                    self::$faker->numberBetween(1, 5), //Item quantite
+
+                    $Random_Produit->tarif //Item prix
+
+                );
+
+                $commandeDTO->addItem($itemDTO);
+
             }
-            $commande->calculerMontantTotal();
-            $commande->save();
+
+            self::$commandeIds[] = $commandeDTO->getId();
+
+            $commandeDTO_DBRESPONSE = self::$serviceCommande->creerCommande($commandeDTO);
+
+            self::assertEquals(
+                $commandeDTO->getDate(), $commandeDTO_DBRESPONSE->getDate()
+            );
+
+            self::assertEquals(
+                $commandeDTO->getTypeLivraison(), $commandeDTO_DBRESPONSE->getTypeLivraison()
+            );
+
+            self::assertEquals(
+                $commandeDTO->getMailClient(), $commandeDTO_DBRESPONSE->getMailClient()
+            );
+
+            self::assertEquals(
+                $commandeDTO->getMontant(), $commandeDTO_DBRESPONSE->getMontant()
+            );
+
+            self::assertEquals(
+                $commandeDTO->getDelai(), $commandeDTO_DBRESPONSE->getDelai()
+            );
+
+            self::assertEquals(
+                $commandeDTO->getEtat(), $commandeDTO_DBRESPONSE->getEtat()
+            );
+
         }
+
     }
 
 

@@ -2,7 +2,7 @@
 
 namespace pizzashop\shop\domain\entities\commande;
 
-use pizzashop\shop\domain\dto\commande\ItemDTO;
+use pizzashop\shop\domain\dto\item\ItemDTO;
 
 class Item extends \Illuminate\Database\Eloquent\Model
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace pizzashop\shop\domain\dto\commande;
+namespace pizzashop\shop\domain\dto\item;
 
 use pizzashop\shop\domain\dto\DTO;
 
@@ -22,6 +22,11 @@ class ItemDTO extends DTO
         $this->quantite = $quantite;
         $this->prix = $prix;
 
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     public function getNumero(): int

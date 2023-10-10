@@ -7,8 +7,8 @@ use pizzashop\shop\domain\dto\catalogue\ProduitDTO;
 class Produit extends \Illuminate\database\eloquent\Model
 {
 
-    const TAILLE_NORMALE = 'N';
-    const TAILLE_GRANDE = 'G';
+    const TAILLE_NORMALE = '1';
+    const TAILLE_GRANDE = '2';
 
     protected $connection = 'catalog';
     protected $table = 'produit';

@@ -1,10 +1,9 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Faker\Factory;
 use Illuminate\Database\Capsule\Manager as DB;
 use pizzashop\shop\domain\dto\commande\CommandeDTO;
-use pizzashop\shop\domain\dto\commande\ItemDTO;
+use pizzashop\shop\domain\dto\item\ItemDTO;
 use pizzashop\shop\domain\entities\commande\Commande;
 
 $dbcom = __DIR__ . '/../config/commande.db.ini';

@@ -2,9 +2,8 @@
 
 namespace pizzashop\shop\domain\dto\commande;
 
-use PhpParser\Node\Expr\Cast\Double;
 use pizzashop\shop\domain\dto\DTO;
-use function DI\add;
+use pizzashop\shop\domain\dto\item\ItemDTO;
 
 class CommandeDTO extends DTO
 {
