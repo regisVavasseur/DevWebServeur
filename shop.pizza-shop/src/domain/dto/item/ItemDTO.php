@@ -80,7 +80,7 @@ class ItemDTO extends DTO
     }
 
     //create function toString
-    public function __toStringArray(): array
+    public function toArray(): array
     {
         return [
             'id' => $this->id,
