@@ -45,7 +45,7 @@ class GetCommandeAction
 
         $response->getBody()->write(json_encode($responseJson));
 
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
 
     }
 }
