@@ -35,7 +35,7 @@ class PatchValiderCommandeAction
             $service = $this->commander;
             $service->validerCommande($id);
         } catch (ServiceCommandeInvalidException $e) {
-            throw new HttpNotFoundException($request, "Commande non trouvée");
+            throw new HttpNotFoundException($request, $e->getMessage());
         }
         $dataJson['type'] = 'commande';
         $dataJson['status'] = 'success';
