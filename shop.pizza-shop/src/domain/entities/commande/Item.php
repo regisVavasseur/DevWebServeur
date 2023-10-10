@@ -19,8 +19,7 @@ class Item extends \Illuminate\Database\Eloquent\Model
     }
 
     public function toDTO() : ItemDTO {
-        $itemDTO = new ItemDTO($this->id ,$this->numero, $this->libelle, $this->taille, $this->quantite,$this->tarif);
-        return $itemDTO;
+        return new ItemDTO($this->id ,$this->numero, $this->libelle, $this->taille, $this->quantite,$this->tarif);
     }
 
 }

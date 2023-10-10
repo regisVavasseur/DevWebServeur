@@ -141,10 +141,10 @@ class ServiceCommande implements iCommander
         try {
             $commande = Commande::where('id', $idCommande)->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            throw new ServiceCommandeInvalidException("Commande inexistante");
+            throw new ServiceCommandeInvalidException("Commande inexistante",404);
         }
-        if ($commande->etat > Commande::ETAT_VALIDE) {
-            throw new ServiceCommandeInvalidException("Commande déjà validée");
+        if ($commande->etat >= Commande::ETAT_VALIDE) {
+            throw new ServiceCommandeInvalidException("Commande déjà validée",400);
         }
         $commande->etat = Commande::ETAT_VALIDE;
         //logger

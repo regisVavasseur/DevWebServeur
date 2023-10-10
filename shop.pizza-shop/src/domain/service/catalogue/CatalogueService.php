@@ -19,14 +19,12 @@ class CatalogueService implements iInfoProduit
             $categorie = $produit->categorie()->firstOrFail();
             $taille = $produit->tailles()->firstOrFail();
 
-        $produitDTO = new ProduitDTO(
+        return new ProduitDTO(
             $produit->numero,
             $produit->libelle,
             $categorie->libelle,
             $taille->libelle,
             Tarif::where('produit_id', $produit->id)->where('taille_id', $taille->id)->firstOrFail()->tarif
         );
-
-        return $produitDTO;
     }
 }
