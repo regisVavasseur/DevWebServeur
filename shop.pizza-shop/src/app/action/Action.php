@@ -8,13 +8,5 @@ use Psr\Http\Message\ServerRequestInterface;
 
 abstract class Action
 {
-
-    protected ContainerInterface $container;
-
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
-
     abstract function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args);
 }

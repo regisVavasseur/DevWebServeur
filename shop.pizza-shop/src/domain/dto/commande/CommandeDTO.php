@@ -124,4 +124,9 @@ class CommandeDTO extends DTO
         $this->etat = $etat;
     }
 
+    public function __toString(): string
+    {
+        return "CommandeDTO [id=" . $this->id . ", date=" . $this->date . ", type_livraison=" . $this->type_livraison . ", mail_client=" . $this->mail_client . ", montant=" . $this->montant . ", delai=" . $this->delai . ", itemsDTO=" . $this->itemsDTO[0]->getNumero() . ", etat=" . $this->etat . "]";
+    }
+
 }
