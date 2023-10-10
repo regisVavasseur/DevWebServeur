@@ -79,7 +79,6 @@ class ItemDTO extends DTO
         $this->prix = $prix;
     }
 
-    //create function toString
     public function toArray(): array
     {
         return [
