@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
 return [
     'logger' => function(ContainerInterface $container) {
         $logger = new Logger('app.logger');
-        $logger->pushHandler(new StreamHandler(__DIR__ . '/../../../logs/errors.log', Level::Error));
+        $logger->pushHandler(new StreamHandler($container->get('logger.file'), $container->get('logger.level')));
         return $logger;
     },
     'catalogue.service' => function(ContainerInterface $container) {
