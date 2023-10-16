@@ -9,6 +9,7 @@ use pizzashop\shop\domain\service\commande\iCommander;
 use pizzashop\shop\domain\service\commande\ServiceCommandeInvalidException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpNotFoundException;
 
 class PatchValiderCommandeAction
@@ -33,7 +34,12 @@ class PatchValiderCommandeAction
             $service = $this->commander;
             $service->validerCommande($id);
         } catch (ServiceCommandeInvalidException $e) {
-            throw new HttpNotFoundException($request, $e->getMessage());
+            if ($e->getCode() == 400) {
+               throw new HttpBadRequestException($request, $e->getMessage());
+            }
+            if ($e->getCode() == 404) {
+                throw new HttpNotFoundException($request, $e->getMessage());
+            }
         }
         $dataJson['type'] = 'commande';
         $dataJson['status'] = 'success';
