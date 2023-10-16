@@ -6,10 +6,17 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class Eloquent
 {
-    public static function init($filename, $connectionName) {
-        $db = new DB();
-        $db->addConnection(parse_ini_file($filename), $connectionName);
-        $db->bootEloquent();
-        $db->setAsGlobal();
+    private $db;
+
+    //constructor
+    public function __construct() {
+        $this->db = new DB();
+    }
+
+
+    public function init($filename, $connectionName) {
+        $this->db->addConnection(parse_ini_file($filename), $connectionName);
+        $this->db->bootEloquent();
+        $this->db->setAsGlobal();
     }
 }

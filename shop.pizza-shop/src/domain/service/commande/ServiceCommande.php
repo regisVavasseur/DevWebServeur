@@ -5,6 +5,7 @@ namespace pizzashop\shop\domain\service\commande;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use pizzashop\shop\domain\dto\commande\CommandeDTO;
 use pizzashop\shop\domain\entities\catalogue\Produit;
+use pizzashop\shop\domain\entities\catalogue\Taille;
 use pizzashop\shop\domain\entities\commande\Commande;
 use pizzashop\shop\domain\entities\commande\Item;
 use pizzashop\shop\domain\service\catalogue\iInfoProduit;
@@ -90,23 +91,26 @@ class ServiceCommande implements iCommander
         $commande->etat = $commande::ETAT_CREE;
         $commande->delai = $delai;
 
+
+
         //erreur ici !!
         foreach ($arrayItems as $itemDTO) {
-            /*try {
-                //
+
+            try {
                 $iInfoItem = $this->iInfoProduit->getProduit($itemDTO->getNumero(), $itemDTO->getTaille());
             } catch (ServiceCatalogueNotFoundException $e) {
                 throw new ServiceCommandeInvalidException("produit ou taille non chargé");
             }
-            */
+
             $item = new Item();
             $item->numero = $itemDTO->getNumero();
             $item->quantite = $itemDTO->getQuantite();
             $item->taille = $itemDTO->getTaille();
             //
-            $item->libelle_taille = 3;
-            $item->libelle = "libelle";
-            $item->tarif = 4.4;
+            $item->libelle_taille = $iInfoItem->libelle_taille;
+
+            $item->libelle = $iInfoItem->libelle_produit;
+            $item->tarif = $iInfoItem->tarif;
             $commande->items()->save($item);
         }
 

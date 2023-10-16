@@ -4,9 +4,9 @@ namespace pizzashop\shop\app\action;
 
 use pizzashop\shop\domain\dto\commande\CommandeDTO;
 use pizzashop\shop\domain\dto\item\ItemDTO;
+use pizzashop\shop\domain\entities\catalogue\Taille;
 use pizzashop\shop\domain\service\commande\iCommander;
-use ServiceCommandeInvalidException;
-use ServiceCommandeNotFoundException;
+use pizzashop\shop\domain\service\commande\ServiceCommandeNotFoundException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
@@ -35,13 +35,11 @@ class PostCreerCommandeAction
             $itemDTO = new ItemDTO($numero, $taille, $quantite);
             $itemsDTO[] = $itemDTO;
         }
-
         $commandeDTO = new CommandeDTO($type_livraison, $mail_client, $itemsDTO);
-
         try {
             $commande = $this->iCommander;
             $commandeDTO2 = $commande->creerCommande($commandeDTO);
-        } catch (\pizzashop\shop\domain\service\commande\ServiceCommandeNotFoundException $e) {
+        } catch (ServiceCommandeNotFoundException $e) {
             throw new HttpNotFoundException($request, $e->getMessage());
         }
 
