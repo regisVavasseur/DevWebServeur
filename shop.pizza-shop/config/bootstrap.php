@@ -25,7 +25,7 @@ $errorHandler->forceContentType('application/json');
 
 
 // Initialisation de Eloquent
-Eloquent::init(__DIR__ . DIRECTORY_SEPARATOR .'catalog.db.ini', 'catalogue');
+Eloquent::init(__DIR__ . DIRECTORY_SEPARATOR .'catalog.db.ini', 'catalog');
 Eloquent::init(__DIR__ . DIRECTORY_SEPARATOR .'commande.db.ini', 'commande');
 
 

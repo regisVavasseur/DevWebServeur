@@ -10,7 +10,7 @@ $dbcom = __DIR__ . '/../config/commande.db.ini';
 $dbcat = __DIR__ . '/../config/catalog.db.ini';
 $db = new DB();
 $db->addConnection(parse_ini_file($dbcom), 'commande');
-$db->addConnection(parse_ini_file($dbcat), 'catalog');
+$db->addConnection(parse_ini_file($dbcat), 'catalogue');
 $db->setAsGlobal();
 $db->bootEloquent();
 $logger = new \Monolog\Logger('commandes');
