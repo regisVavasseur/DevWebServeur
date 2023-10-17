@@ -6,28 +6,19 @@ use pizzashop\shop\domain\dto\DTO;
 
 class ItemDTO extends DTO
 {
-    private int $id;
     private int $numero;
     private string $libelle;
     private int $taille;
     private int $quantite;
-    private float $prix;
+    private float $tarif;
 
-    public function __construct(int $id, int $numero, string $libelle, int $taille, int $quantite, float $prix)
+    public function __construct(int $numero, int $taille, int $quantite)
     {
-        $this->id = $id;
         $this->numero = $numero;
-        $this->libelle = $libelle;
         $this->taille = $taille;
         $this->quantite = $quantite;
-        $this->prix = $prix;
-
     }
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
 
     public function getNumero(): int
     {
@@ -74,20 +65,19 @@ class ItemDTO extends DTO
         return $this->prix;
     }
 
-    public function setPrix(float $prix): void
+    public function setPrix(float $tarif): void
     {
-        $this->prix = $prix;
+        $this->tarif = $tarif;
     }
 
     public function toArray(): array
     {
         return [
-            'id' => $this->id,
             'numero' => $this->numero,
             'libelle' => $this->libelle,
             'taille' => $this->taille,
             'quantite' => $this->quantite,
-            'prix' => $this->prix
+            'prix' => $this->tarif
         ];
     }
 

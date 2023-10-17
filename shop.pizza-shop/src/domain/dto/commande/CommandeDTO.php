@@ -17,18 +17,15 @@ class CommandeDTO extends DTO
     private array $itemsDTO;
     private int $etat;
 
-
-    public function __construct(string $id, string $date, int $type_livraison, string $mail_client, float $montant, int $delai, array $itemsDTO, int $etat = 1)
+    public function __construct(int $type_livraison, string $mail_client, array $itemsDTO)
     {
-        $this->id = $id;
-        $this->date = $date;
         $this->type_livraison = $type_livraison;
         $this->mail_client = $mail_client;
-        $this->montant = $montant;
-        $this->delai = $delai;
         $this->itemsDTO = $itemsDTO;
-        $this->etat = $etat;
+        $this->delai = 0;
     }
+
+
 
     public function getId(): string
     {

@@ -3,7 +3,6 @@
 namespace pizzashop\shop\domain\entities\commande;
 
 use pizzashop\shop\domain\dto\commande\CommandeDTO;
-use pizzashop\shop\domain\entities\catalogue\Produit;
 
 class Commande extends \Illuminate\Database\Eloquent\Model
 {
@@ -24,12 +23,14 @@ class Commande extends \Illuminate\Database\Eloquent\Model
     public $timestamps = false;
     protected $fillable = [ 'delai, date_commande, type_livraison, etat, montant_total, id_client'];
 
-    public function calculerMontantTotal() {
+    public function calculerMontantTotal(): float {
         $montantTotal = 0;
-        foreach ($this->items() as $item) {
+        foreach ($this->items as $item) {
             $montantTotal += ($item->tarif * $item->quantite);
         }
         $this->montant_total = $montantTotal;
+        $this->save();
+        return $montantTotal;
     }
 
     public function items() {
@@ -38,14 +39,15 @@ class Commande extends \Illuminate\Database\Eloquent\Model
 
     public function toDTO() : CommandeDTO{
         $commandeDTO = new CommandeDTO(
-            $this->id,
-            $this->date_commande,
             $this->type_livraison ,
             $this->mail_client,
-            $this->montant_total,
-            $this->delai, [],
-            $this->etat
+            [],
         );
+        $commandeDTO->setId($this->id);
+        $commandeDTO->setDate($this->date_commande);
+        $commandeDTO->setMontant($this->montant_total);
+        $commandeDTO->setDelai($this->delai);
+        $commandeDTO->setEtat($this->etat);
         foreach ($this->items as $item) {
             $commandeDTO->addItem($item->toDTO());
         }

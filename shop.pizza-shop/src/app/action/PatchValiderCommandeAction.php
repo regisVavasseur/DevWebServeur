@@ -5,27 +5,20 @@ namespace pizzashop\shop\app\action;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
-use PHPUnit\Exception;
-use pizzashop\shop\domain\service\catalogue\CatalogueService;
 use pizzashop\shop\domain\service\commande\iCommander;
-use pizzashop\shop\domain\service\commande\ServiceCommande;
 use pizzashop\shop\domain\service\commande\ServiceCommandeInvalidException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpBadRequestException;
-use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
 
 class PatchValiderCommandeAction
 {
     private iCommander $commander;
-    private Logger $logger;
 
-    public function __construct(iCommander $commander, Logger $logger)
+    public function __construct(iCommander $commander)
     {
         $this->commander = $commander;
-        $this->logger = $logger;
-
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -35,16 +28,19 @@ class PatchValiderCommandeAction
         $dataJson = [];
 
         $logger = new Logger('app.logger');
+        $logger->pushHandler(new StreamHandler(__DIR__ . '/../../../logs/errors.log', Level::Error));
 
         try {
             $service = $this->commander;
             $service->validerCommande($id);
         } catch (ServiceCommandeInvalidException $e) {
-            throw new HttpBadRequestException($request, $e->getMessage());
-        } catch (Exception $e) {
-            throw new HttpInternalServerErrorException($request, $e->getMessage());
+            if ($e->getCode() == 400) {
+               throw new HttpBadRequestException($request, $e->getMessage());
+            }
+            if ($e->getCode() == 404) {
+                throw new HttpNotFoundException($request, $e->getMessage());
+            }
         }
-
         $dataJson['type'] = 'commande';
         $dataJson['status'] = 'success';
         $dataJson['commande'] = $service->accederCommande($id)->toArray();
@@ -52,8 +48,7 @@ class PatchValiderCommandeAction
 
         $response->getBody()->write(json_encode($dataJson));
 
-        return $response;
-
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
 
     }
 }

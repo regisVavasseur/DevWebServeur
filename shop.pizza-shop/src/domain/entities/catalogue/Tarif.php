@@ -9,7 +9,10 @@ class Tarif extends \Illuminate\database\eloquent\Model
 
     protected $connection = 'catalog';
     protected $table = 'tarif';
+    protected $primaryKey = 'id';
     public $timestamps = false;
+
+
 
     public function produit(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

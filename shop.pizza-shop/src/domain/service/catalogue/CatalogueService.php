@@ -2,11 +2,8 @@
 
 namespace pizzashop\shop\domain\service\catalogue;
 
-use pizzashop\shop\domain\entities\catalogue\Categorie;
 use pizzashop\shop\domain\entities\catalogue\Produit;
-use pizzashop\shop\domain\entities\catalogue\Taille;
 use pizzashop\shop\domain\entities\catalogue\Tarif;
-use pizzashop\shop\domain\service\catalogue\iInfoProduit;
 use pizzashop\shop\domain\dto\catalogue\ProduitDTO;
 
 class CatalogueService implements iInfoProduit
@@ -18,7 +15,6 @@ class CatalogueService implements iInfoProduit
         $produit = Produit::where('numero', $num)->firstOrFail();
             $categorie = $produit->categorie()->firstOrFail();
             $taille = $produit->tailles()->firstOrFail();
-
         return new ProduitDTO(
             $produit->numero,
             $produit->libelle,

@@ -2,43 +2,54 @@
 
 namespace pizzashop\shop\app\action;
 
-use Monolog\Handler\StreamHandler;
-use Monolog\Level;
-use Monolog\Logger;
-use pizzashop\shop\domain\service\catalogue\CatalogueService;
-use pizzashop\shop\domain\service\commande\ServiceCommande;
-use ServiceCommandeInvalidException;
-use ServiceCommandeNotFoundException;
+use pizzashop\shop\domain\dto\commande\CommandeDTO;
+use pizzashop\shop\domain\dto\item\ItemDTO;
+use pizzashop\shop\domain\entities\catalogue\Taille;
+use pizzashop\shop\domain\service\commande\iCommander;
+use pizzashop\shop\domain\service\commande\ServiceCommandeNotFoundException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 
 class PostCreerCommandeAction
 {
+
+    private iCommander $iCommander;
+
+    public function __construct(iCommander $commande)
+    {
+        $this->iCommander = $commande;
+    }
+
     public function __invoke(Request $request, Response $response, array $args)
     {
-        $id = $args['id'] ?? 0;
-
-        $dataJson = [];
-
-        $logger = new Logger('app.logger');
-        $logger->pushHandler(new StreamHandler(__DIR__ . '/../../../logs/errors.log', Level::Error));
-
-        $catalogueService = new CatalogueService();
-
-
+        $data = json_decode($request->getBody()->getContents(), true);
+        $mail_client = $data['mail_client'];
+        $type_livraison = $data['type_livraison'];
+        $items = $data['items'];
+        $itemsDTO = [];
+        foreach ($items as $item) {
+            $numero = $item['numero'];
+            $taille = $item['taille'];
+            $quantite = $item['quantite'];
+            $itemDTO = new ItemDTO($numero, $taille, $quantite);
+            $itemsDTO[] = $itemDTO;
+        }
+        $commandeDTO = new CommandeDTO($type_livraison, $mail_client, $itemsDTO);
         try {
-            $service = new ServiceCommande($catalogueService, $logger);
-            $service->creerCommande($id);
-        } catch (ServiceCommandeInvalidException $e) {
+            $commande = $this->iCommander;
+            $commandeDTO2 = $commande->creerCommande($commandeDTO);
+        } catch (ServiceCommandeNotFoundException $e) {
             throw new HttpNotFoundException($request, $e->getMessage());
         }
-        $dataJson['status'] = '201 CREATED';
-        $dataJson['Header'] = 'Location: /commandes/' . $id . '/';
-        $dataJson['commande'] = $service->accederCommande($id);
 
-        return $response->getBody()->write(json_encode($dataJson));
+        $dataJson = [
+            'type' => 'resource',
+            'commande' => $commandeDTO2->toArray()
+        ];
 
+        $response->getBody()->write(json_encode($dataJson));
 
+        return $response;
     }
 }

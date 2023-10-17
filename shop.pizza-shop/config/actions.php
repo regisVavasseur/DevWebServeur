@@ -2,6 +2,7 @@
 
 use pizzashop\shop\app\action\GetCommandeAction;
 use pizzashop\shop\app\action\PatchValiderCommandeAction;
+use pizzashop\shop\app\action\PostCreerCommandeAction;
 use Psr\Container\ContainerInterface;
 
 return [
@@ -10,6 +11,9 @@ return [
     },
 
     PatchValiderCommandeAction::class => function(ContainerInterface $container) {
-    return new PatchValiderCommandeAction($container->get('commande.service'), $container->get('logger'));
+    return new PatchValiderCommandeAction($container->get('commande.service'));
+    },
+    PostCreerCommandeAction::class => function(ContainerInterface $container) {
+        return new PostCreerCommandeAction($container->get('commande.service'));
     }
 ];

@@ -4,12 +4,12 @@ namespace pizzashop\shop\domain\service\commande;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use pizzashop\shop\domain\dto\commande\CommandeDTO;
-use pizzashop\shop\domain\dto\item\ItemDTO;
 use pizzashop\shop\domain\entities\catalogue\Produit;
 use pizzashop\shop\domain\entities\catalogue\Taille;
 use pizzashop\shop\domain\entities\commande\Commande;
 use pizzashop\shop\domain\entities\commande\Item;
 use pizzashop\shop\domain\service\catalogue\iInfoProduit;
+use pizzashop\shop\domain\service\catalogue\ServiceCatalogueNotFoundException;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 
@@ -84,45 +84,41 @@ class ServiceCommande implements iCommander
         //fin exo4
 
         $commande = new Commande();
-        $commande->id = $commandeDTO->getId();
+        $commande->id = Uuid::uuid4()->toString();;
         $commande->mail_client = $emailClient;
-        $commande->date_commande = $commandeDTO->getDate();
+        $commande->date_commande = date("Y-m-d H:i:s");
         $commande->type_livraison = $typeLivraison;
-        $commande->etat = $commandeDTO->getEtat();
+        $commande->etat = $commande::ETAT_CREE;
         $commande->delai = $delai;
 
-        $total_price = 0;
 
-        foreach ($arrayItems as $item) {
-            $total_price += ($item->getPrix() * $item->getQuantite());
 
-            $this->creerItem($item, $commande->id);
+        //erreur ici !!
+        foreach ($arrayItems as $itemDTO) {
+
+            try {
+                $iInfoItem = $this->iInfoProduit->getProduit($itemDTO->getNumero(), $itemDTO->getTaille());
+            } catch (ServiceCatalogueNotFoundException $e) {
+                throw new ServiceCommandeInvalidException("produit ou taille non chargé");
+            }
+
+            $item = new Item();
+            $item->numero = $itemDTO->getNumero();
+            $item->quantite = $itemDTO->getQuantite();
+            $item->taille = $itemDTO->getTaille();
+            //
+            $item->libelle_taille = $iInfoItem->libelle_taille;
+
+            $item->libelle = $iInfoItem->libelle_produit;
+            $item->tarif = $iInfoItem->tarif;
+            $commande->items()->save($item);
         }
 
-        $commande->montant_total = $total_price;
-        $commandeDTO->setMontant($total_price);
-
+        $commande->calculerMontantTotal();
         $commande->save();
-
         $this->logger->info('CommandeServiceLogger: CommandeService: Commande créée');
-
         return $commande->toDTO();
 
-    }
-
-    public function creerItem(ItemDTO $itemDTO, string $uuidCommande): void {
-        $item = new Item();
-
-        $item->numero = $itemDTO->getNumero();
-        $item->libelle = $itemDTO->getLibelle();
-        $item->taille = $itemDTO->getTaille();
-        $item->libelle_taille = Taille::where('id', $itemDTO->getTaille())->firstOrFail()->libelle;
-        $item->quantite = $itemDTO->getQuantite();
-        $item->tarif = $itemDTO->getPrix();
-
-        $item->commande_id = $uuidCommande;
-
-        $item->save();
     }
 
     public function accederCommande(string $idCommande): CommandeDTO
@@ -149,9 +145,7 @@ class ServiceCommande implements iCommander
         $commande->etat = Commande::ETAT_VALIDE;
         //logger
         $commande->save();
-
         $this->logger->info('CommandeServiceLogger: CommandeService: Commande validée');
-
         return $commande->toDTO();
     }
 }

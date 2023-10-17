@@ -9,7 +9,7 @@ $depedencies = require_once __DIR__ . DIRECTORY_SEPARATOR . 'dependencies.php';
 $actions = require_once __DIR__ . DIRECTORY_SEPARATOR . 'actions.php';
 
 $builder = new \DI\ContainerBuilder();
-//$builder->addDefinitions($settings);
+$builder->addDefinitions($settings);
 $builder->addDefinitions($depedencies);
 $builder->addDefinitions($actions);
 $container = $builder->build();
@@ -21,13 +21,13 @@ $app->addRoutingMiddleware();
 //gestionnaire d'erreur
 $errorMiddleware = $app->addErrorMiddleware(true, false, false);
 $errorHandler = $errorMiddleware->getDefaultErrorHandler();
-$errorHandler->forceContentType('application/json');
 
 
-// Initialisation de Eloquent
-Eloquent::init(__DIR__ . DIRECTORY_SEPARATOR .'catalog.db.ini', 'catalogue');
-Eloquent::init(__DIR__ . DIRECTORY_SEPARATOR .'commande.db.ini', 'commande');
+// Initialisation de Eloquen
 
+$init = new Eloquent();
+$init->init(__DIR__ . DIRECTORY_SEPARATOR .'catalog.db.ini', 'catalog');
+$init->init(__DIR__ . DIRECTORY_SEPARATOR .'commande.db.ini', 'commande');
 
 // Eloquent::create()->addConnection(parse_ini_file(__DIR__ . DIRECTORY_SEPARATOR .'catalog.db.ini'))->addConnection(parse_ini_file(__DIR__ . DIRECTORY_SEPARATOR .'commande.db.ini'));
 
