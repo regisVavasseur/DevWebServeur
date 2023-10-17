@@ -7,6 +7,10 @@ use domain\dto\TokenDTO;
 use domain\dto\UserDTO;
 use domain\provider\AuthProvider;
 use domain\provider\JwtManager;
+use pizzashop\shop\domain\service\catalogue\AuthProviderCredentialsException;
+use pizzashop\shop\domain\service\catalogue\AuthProviderRefreshTokenException;
+use pizzashop\shop\domain\service\catalogue\AuthServiceValidateException;
+use pizzashop\shop\domain\service\catalogue\JwtManagerException;
 use Psr\Log\LoggerInterface;
 
 class AuthService implements AuthServiceInterface

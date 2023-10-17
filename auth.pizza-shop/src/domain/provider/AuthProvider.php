@@ -2,6 +2,8 @@
 
 namespace domain\provider;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use pizzashop\shop\domain\service\catalogue\AuthProviderCredentialsException;
 use function PHPUnit\Framework\isEmpty;
 
 class AuthProvider
@@ -25,7 +27,7 @@ class AuthProvider
             throw new AuthProviderCredentialsException("User not found");
         }
 
-        if (!$password_verify($password, $user->password)) {
+        if (!password_verify($password, $user->password)) {
             throw new AuthProviderCredentialsException("Wrong password");
         } else {
             $this->generateRefreshToken($user);
