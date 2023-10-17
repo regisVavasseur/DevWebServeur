@@ -2,6 +2,7 @@
 
 namespace domain\provider;
 
+use domain\entites\User;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use pizzashop\shop\domain\service\catalogue\AuthProviderCredentialsException;
