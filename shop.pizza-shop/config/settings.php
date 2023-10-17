@@ -5,4 +5,6 @@ use Monolog\Level;
 return [
     'logger.file' => __DIR__ . '/../../../logs/errors.log',
     'logger.level' => Level::Error,
+    'connection.name.catalogue' => 'catalog',
+    'connection.name.commande' => 'commande',
 ];

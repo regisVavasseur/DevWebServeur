@@ -23,11 +23,11 @@ $errorMiddleware = $app->addErrorMiddleware(true, false, false);
 $errorHandler = $errorMiddleware->getDefaultErrorHandler();
 $errorHandler->forceContentType('application/json');
 
-// Initialisation de Eloquen
+// Initialisation de Eloquent
 
 $init = new Eloquent();
-$init->init(__DIR__ . DIRECTORY_SEPARATOR .'catalog.db.ini', 'catalog');
-$init->init(__DIR__ . DIRECTORY_SEPARATOR .'commande.db.ini', 'commande');
+$init->init(__DIR__ . DIRECTORY_SEPARATOR .'catalog.db.ini', $app->getContainer()->get('connection.name.catalogue'));
+$init->init(__DIR__ . DIRECTORY_SEPARATOR .'commande.db.ini', $app->getContainer()->get('connection.name.commande'));
 
 // Eloquent::create()->addConnection(parse_ini_file(__DIR__ . DIRECTORY_SEPARATOR .'catalog.db.ini'))->addConnection(parse_ini_file(__DIR__ . DIRECTORY_SEPARATOR .'commande.db.ini'));
 
