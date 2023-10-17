@@ -19,7 +19,7 @@ class AuthProvider
     public function checkCredentials(string $username, string $password): void
     {
         try {
-            $user = User::where('username', $username)->firstOrFail();
+            $user = User::where('email', $username)->firstOrFail();
 
         } catch (ModelNotFoundException $e) {
             throw new AuthProviderCredentialsException("User not found");

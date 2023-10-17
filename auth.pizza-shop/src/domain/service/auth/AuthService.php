@@ -15,10 +15,21 @@ class AuthService implements AuthServiceInterface
     private JwtManager $jwtManager;
     private LoggerInterface $logger;
 
+    public function __construct(AuthProvider $authProvider, JwtManager $jwtManager, LoggerInterface $logger)
+    {
+        $this->authProvider = $authProvider;
+        $this->jwtManager = $jwtManager;
+        $this->logger = $logger;
+    }
+
     public function signup(CredentialsDTO $credentialsDTO): UserDTO
     {
-
-
+        try {
+            $this->authProvider->register($credentialsDTO->email, $credentialsDTO->password);
+        } catch (AuthProviderSignupException $e) {
+            $this->logger->warning($e->getMessage());
+            throw new AuthServiceSignupException($e->getMessage());
+        }
     }
 
     public function signin(CredentialsDTO $credentialsDTO): TokenDTO
@@ -26,9 +37,9 @@ class AuthService implements AuthServiceInterface
         try {
             $this->authProvider->checkCredentials($credentialsDTO->email, $credentialsDTO->password);
         } catch (AuthProviderCredentialsException $e) {
-            $this->logger->warning($e->getMessage());
+            $this->logger->warning('auth attent failed for '.$credentialsDTO->email.' : '.$e->getMessage());
+            throw new AuthServiceCredentialsException($e->getMessage());
         }
-
     }
 
     public function validate(TokenDTO $tokenDTO): UserDTO
