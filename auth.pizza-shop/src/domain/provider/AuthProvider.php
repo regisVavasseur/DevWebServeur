@@ -5,7 +5,6 @@ namespace domain\provider;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use pizzashop\shop\domain\service\catalogue\AuthProviderCredentialsException;
-use function PHPUnit\Framework\isEmpty;
 
 class AuthProvider
 {
