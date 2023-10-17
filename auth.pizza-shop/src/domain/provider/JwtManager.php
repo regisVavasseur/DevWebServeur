@@ -1,6 +1,6 @@
 <?php
 
-namespace domain\service\auth;
+namespace domain\provider;
 
 class JwtManager
 {

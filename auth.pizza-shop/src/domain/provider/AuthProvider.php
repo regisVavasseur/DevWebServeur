@@ -1,12 +1,16 @@
 <?php
 
-namespace domain\service\auth;
+namespace domain\provider;
+
+use function PHPUnit\Framework\isEmpty;
 
 class AuthProvider
 {
     public function checkCredentials(string $username, string $password): void
     {
+        if(!isEmpty($username) || !isEmpty($password)) {
 
+        }
     }
 
     public function checkToken(string $token): void
