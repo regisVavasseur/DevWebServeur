@@ -11,7 +11,7 @@ class Item extends \Illuminate\Database\Eloquent\Model
     protected $table = 'item';
     protected $primaryKey = 'id';
     public $timestamps = false;
-    protected $fillable = [ 'numero, libelle, taille, tarif, quantite'];
+    protected $fillable = [ 'numero, libelle, taille, tarif, quantite', 'libelle_taille'];
 
     public function commande()
     {
@@ -22,6 +22,7 @@ class Item extends \Illuminate\Database\Eloquent\Model
         $itemDTO = new ItemDTO($this->numero, $this->taille, $this->quantite);
         $itemDTO->setPrix($this->tarif);
         $itemDTO->setLibelle($this->libelle);
+        $itemDTO->setLibelleTaille($this->libelle_taille);
         return $itemDTO;
     }
 

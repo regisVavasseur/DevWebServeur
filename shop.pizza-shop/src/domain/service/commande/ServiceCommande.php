@@ -84,7 +84,7 @@ class ServiceCommande implements iCommander
         //fin exo4
 
         $commande = new Commande();
-        $commande->id = Uuid::uuid4()->toString();;
+        $commande->id = Uuid::uuid4()->toString();
         $commande->mail_client = $emailClient;
         $commande->date_commande = date("Y-m-d H:i:s");
         $commande->type_livraison = $typeLivraison;
