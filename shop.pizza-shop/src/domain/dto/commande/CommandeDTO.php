@@ -4,28 +4,29 @@ namespace pizzashop\shop\domain\dto\commande;
 
 use pizzashop\shop\domain\dto\DTO;
 use pizzashop\shop\domain\dto\item\ItemDTO;
+use pizzashop\shop\domain\entities\commande\Commande;
 
 class CommandeDTO extends DTO
 {
 
     private string $id;
+    private int $delai;
     private string $date;
     private int $type_livraison;
-    private string $mail_client;
-    private float $montant;
-    private int $delai;
-    private array $itemsDTO;
     private int $etat;
+    private float $montant;
+    private string $mail_client;
 
-    public function __construct(int $type_livraison, string $mail_client, array $itemsDTO)
+    private array $itemsDTO;
+
+    public function __construct(int $type_livraison, string $mail_client, array $itemsDTO, int $etat=Commande::ETAT_CREE)
     {
         $this->type_livraison = $type_livraison;
         $this->mail_client = $mail_client;
         $this->itemsDTO = $itemsDTO;
         $this->delai = 0;
+        $this->etat = $etat;
     }
-
-
 
     public function getId(): string
     {
@@ -108,6 +109,14 @@ class CommandeDTO extends DTO
     public function setEtat(int $etat): void
     {
         $this->etat = $etat;
+    }
+
+    public function calculerMontant() : void {
+        $total_price = 0;
+        foreach ($this->itemsDTO as $item) {
+            $total_price += $item->getPrix();
+        }
+        $this->montant = $total_price;
     }
 
     public function toArray(): array

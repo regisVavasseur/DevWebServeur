@@ -27,7 +27,9 @@ class Produit extends \Illuminate\database\eloquent\Model
             ->withPivot('tarif');
     }
 
-
-
+    public function tarif(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Tarif::class, 'produit_id');
+    }
 
 }

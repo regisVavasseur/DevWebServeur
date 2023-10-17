@@ -24,21 +24,22 @@ class PostCreerCommandeAction
     public function __invoke(Request $request, Response $response, array $args)
     {
         $data = json_decode($request->getBody()->getContents(), true);
-        $mail_client = $data['mail_client'];
-        $type_livraison = $data['type_livraison'];
-        $items = $data['items'];
-        $itemsDTO = [];
-        foreach ($items as $item) {
-            $numero = $item['numero'];
-            $taille = $item['taille'];
-            $quantite = $item['quantite'];
-            $itemDTO = new ItemDTO($numero, $taille, $quantite);
-            $itemsDTO[] = $itemDTO;
-        }
-        $commandeDTO = new CommandeDTO($type_livraison, $mail_client, $itemsDTO);
+
         try {
-            $commande = $this->iCommander;
-            $commandeDTO2 = $commande->creerCommande($commandeDTO);
+            $commandeDTO2 = $this->iCommander->creerCommande(
+                new CommandeDTO(
+                    $data['type_livraison'],
+                    $data['mail_client'],
+                    array_map(
+                        fn($item) => new ItemDTO(
+                            $item['numero'],
+                            $item['taille'],
+                            $item['quantite']
+                        ),
+                        $data['items']
+                    )
+                )
+            );
         } catch (ServiceCommandeNotFoundException $e) {
             throw new HttpNotFoundException($request, $e->getMessage());
         }
@@ -48,7 +49,9 @@ class PostCreerCommandeAction
             'commande' => $commandeDTO2->toArray()
         ];
 
-        $response->getBody()->write(json_encode($dataJson));
+        $response->getBody()->write(
+            json_encode($dataJson)
+        );
 
         return $response;
     }

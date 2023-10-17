@@ -63,25 +63,9 @@ class ServiceCommandeTest extends \PHPUnit\Framework\TestCase {
 
         for ($i = 0; $i < self::$faker->numberBetween(2, 5); $i++) {
             $commandeDTO = new CommandeDTO(
-                Uuid::uuid4()->toString(), //Commande id
-
-                self::$faker->dateTimeBetween('-1 year', 'now')
-                    ->format('Y-m-d H:i:s'), //Commande date
-
-                self::$faker->randomElement([
-                    Commande::LIVRAISON_SUR_PLACE, Commande::LIVRAISON_A_EMPORTER, Commande::LIVRAISON_A_DOMICILE
-                ]), //Commande type_livraison
-
-                self::$faker->email(), //Commande mail_client
-
-                0, //Commande montant
-
-                0, //Commande delai
-
-                [], //Commande itemsDTO
-
-                Commande::ETAT_CREE //Commande etat
-
+                self::$faker->numberBetween(1, 2),
+                self::$faker->email,
+                []
             );
 
             for ($j = 0; $j < self::$faker->numberBetween(1, 5); $j++) {
@@ -91,34 +75,21 @@ class ServiceCommandeTest extends \PHPUnit\Framework\TestCase {
                     self::$faker->numberBetween(1, 2)
                 );
 
-                $itemDTO = new ItemDTO(
-                    Produit::where('numero', $Random_Produit->numero_produit)
-                        ->firstOrFail()->id, //Item id
-
-                    $Random_Produit->numero_produit, //Item numero
-
-                    $Random_Produit->libelle_produit, //Item libelle
-
-                    Taille::where('libelle', $Random_Produit->libelle_taille)
-                        ->firstOrFail()->id, //Item taille
-
-                    self::$faker->numberBetween(1, 5), //Item quantite
-
-                    $Random_Produit->tarif //Item prix
-
+                $commandeDTO->addItem(
+                    new ItemDTO(
+                        $Random_Produit->numero_produit,
+                        Taille::where('libelle', $Random_Produit->libelle_taille)->first()->id,
+                        self::$faker->numberBetween(1, 5)
+                    )
                 );
-
-                $commandeDTO->addItem($itemDTO);
 
             }
 
-            self::$commandeIds[] = $commandeDTO->getId();
+            $commandeDTO->calculerMontant();
 
             $commandeDTO_DBRESPONSE = self::$serviceCommande->creerCommande($commandeDTO);
 
-            self::assertEquals(
-                $commandeDTO->getDate(), $commandeDTO_DBRESPONSE->getDate()
-            );
+            self::$commandeIds[] = $commandeDTO_DBRESPONSE->getId();
 
             self::assertEquals(
                 $commandeDTO->getTypeLivraison(), $commandeDTO_DBRESPONSE->getTypeLivraison()
@@ -139,14 +110,12 @@ class ServiceCommandeTest extends \PHPUnit\Framework\TestCase {
             self::assertEquals(
                 $commandeDTO->getEtat(), $commandeDTO_DBRESPONSE->getEtat()
             );
-
         }
 
     }
 
 
     public function testGetCommande(){
-        //$id = self::$commandeIds[0];
         foreach (self::$commandeIds as $id){
 
             $commandeEntity = Commande::find($id);
@@ -160,7 +129,7 @@ class ServiceCommandeTest extends \PHPUnit\Framework\TestCase {
             $this->assertEquals($commandeEntity->etat, $commandeDTO->getEtat()); // TODO: check if this is correct
             $this->assertEquals($commandeEntity->type_livraison, $commandeDTO->getTypeLivraison());
             $this->assertEquals($commandeEntity->montant_total, $commandeDTO->getMontant());
-            $this->assertEquals(count($commandeEntity->items), count($commandeDTO->getItemsDTO()));
+            $this->assertSameSize($commandeEntity->items, $commandeDTO->getItemsDTO());
         }
 
     }
