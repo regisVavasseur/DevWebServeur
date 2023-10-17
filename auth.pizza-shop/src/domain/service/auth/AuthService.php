@@ -11,6 +11,8 @@ use pizzashop\shop\domain\service\catalogue\AuthProviderCredentialsException;
 use pizzashop\shop\domain\service\catalogue\AuthProviderRefreshTokenException;
 use pizzashop\shop\domain\service\catalogue\AuthServiceValidateException;
 use pizzashop\shop\domain\service\catalogue\JwtManagerException;
+use pizzashop\shop\domain\service\catalogue\JwtManagerExpiredTokenException;
+use pizzashop\shop\domain\service\catalogue\JwtManagerInvalidTokenException;
 use Psr\Log\LoggerInterface;
 
 class AuthService implements AuthServiceInterface
@@ -26,6 +28,9 @@ class AuthService implements AuthServiceInterface
         $this->logger = $logger;
     }
 
+    /**
+     * @throws AuthServiceSignupException
+     */
     public function signup(CredentialsDTO $credentialsDTO): UserDTO
     {
         try {
@@ -36,6 +41,9 @@ class AuthService implements AuthServiceInterface
         }
     }
 
+    /**
+     * @throws AuthServiceCredentialsException
+     */
     public function signin(CredentialsDTO $credentialsDTO): TokenDTO
     {
         try {
@@ -46,6 +54,11 @@ class AuthService implements AuthServiceInterface
         }
     }
 
+    /**
+     * @throws AuthServiceValidateException
+     * @throws JwtManagerInvalidTokenException
+     * @throws JwtManagerExpiredTokenException
+     */
     public function validate(TokenDTO $tokenDTO): UserDTO
     {
         try {
@@ -61,7 +74,7 @@ class AuthService implements AuthServiceInterface
         try {
             $this->authProvider->checkToken($tokenDTO->refreshToken);
         } catch (AuthProviderRefreshTokenException $e) {
-            $this->logger->warning("failed JWT refresh")
+            $this->logger->warning("failed JWT refresh");
         }
     }
 
