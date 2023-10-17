@@ -33,14 +33,20 @@ class JwtManager
         return $token;
     }
 
-    public function validate(string $jwtToken): void {
+    /**
+     * @throws JwtManagerInvalidTokenException
+     * @throws JwtManagerExpiredTokenException
+     */
+    public function validate(string $jwtToken): array {
         try {
             $jwtToken = JWT::decode($jwtToken,new Key($this->secret, 'HS512'));
         } catch (ExpiredException $e){
             throw new JwtManagerExpiredTokenException("Expired jwt token");
-        } catch (SignatureInvalidException| UnexpectedValueException | DomainException){
+        } catch (SignatureInvalidException| UnexpectedValueException | DomainException $e){
             throw new JwtManagerInvalidTokenException("Invalid jwt token");
         }
+
+        return (array) $jwtToken->upr;
     }
 
     /**
@@ -50,8 +56,5 @@ class JwtManager
     {
         $this->issuer = $issuer;
     }
-
-
-
 
 }

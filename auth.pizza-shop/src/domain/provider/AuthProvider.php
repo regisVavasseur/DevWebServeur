@@ -2,6 +2,7 @@
 
 namespace domain\provider;
 
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use pizzashop\shop\domain\service\catalogue\AuthProviderCredentialsException;
 use function PHPUnit\Framework\isEmpty;
@@ -9,15 +10,22 @@ use function PHPUnit\Framework\isEmpty;
 class AuthProvider
 {
 
+    private User $currentAuthenticatedUserEntity;
+
+    /**
+     * @throws Exception
+     */
     private function generateRefreshToken(User $user): void
     {
         $user->refresh_token = bin2hex(random_bytes(32));
         $user->refresh_token_expiration = date('Y-m-d H:i:s', time() + 3600);
         $user->save();
-
-
     }
 
+    /**
+     * @throws AuthProviderCredentialsException
+     * @throws Exception
+     */
     public function checkCredentials(string $username, string $password): void
     {
         try {
@@ -58,5 +66,12 @@ class AuthProvider
 
     }
 
-    public function getAuthenticatedUser(): array {}
+    public function getAuthenticatedUser(): array
+    {
+        return [
+            'username' => $this->currentAuthenticatedUserEntity->userName,
+            'email' => $this->currentAuthenticatedUserEntity->email,
+            'refresh_token' => $this->currentAuthenticatedUserEntity->refresh_token,
+        ];
+    }
 }
