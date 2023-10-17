@@ -21,7 +21,7 @@ $app->addRoutingMiddleware();
 //gestionnaire d'erreur
 $errorMiddleware = $app->addErrorMiddleware(true, false, false);
 $errorHandler = $errorMiddleware->getDefaultErrorHandler();
-
+$errorHandler->forceContentType('application/json');
 
 // Initialisation de Eloquen
 
