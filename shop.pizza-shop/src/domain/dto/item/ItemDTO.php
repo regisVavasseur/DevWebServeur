@@ -11,6 +11,7 @@ class ItemDTO extends DTO
     private int $taille;
     private int $quantite;
     private float $tarif;
+    private string $libelle_taille;
 
     public function __construct(int $numero, int $taille, int $quantite)
     {
@@ -19,6 +20,18 @@ class ItemDTO extends DTO
         $this->quantite = $quantite;
     }
 
+
+
+
+    public function getLibelleTaille(): int
+    {
+        return $this->numero;
+    }
+
+    public function setLibelleTaille(string $taille_libelle): void
+    {
+        $this->libelle_taille = $taille_libelle;
+    }
 
     public function getNumero(): int
     {
@@ -77,7 +90,8 @@ class ItemDTO extends DTO
             'libelle' => $this->libelle,
             'taille' => $this->taille,
             'quantite' => $this->quantite,
-            'prix' => $this->tarif
+            'libelle taille' => $this->libelle_taille,
+            'tarif' => $this->tarif
         ];
     }
 
