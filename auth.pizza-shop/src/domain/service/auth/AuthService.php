@@ -74,7 +74,7 @@ class AuthService implements AuthServiceInterface
         try {
             $this->authProvider->checkToken($tokenDTO->refreshToken);
         } catch (AuthProviderRefreshTokenException $e) {
-            $this->logger->warning("failed JWT refresh")
+            $this->logger->warning("failed JWT refresh");
         }
     }
 
