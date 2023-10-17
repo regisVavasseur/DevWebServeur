@@ -32,7 +32,6 @@ class ServiceCommande implements iCommander
     public function creerCommande(CommandeDTO $commandeDTO): CommandeDTO
     {
         //exercice 4 - Validation infos commande
-
         $emailClient = $commandeDTO->getMailClient();
         $typeLivraison = $commandeDTO->getTypeLivraison();
         $delai = $commandeDTO->getDelai();
@@ -45,19 +44,16 @@ class ServiceCommande implements iCommander
         }
 
         //• type_livraison présent et valeur conforme (liste),
-
         if (!in_array($typeLivraison, [Commande::LIVRAISON_SUR_PLACE, Commande::LIVRAISON_A_EMPORTER, Commande::LIVRAISON_A_DOMICILE])) {
             throw new ServiceCommandeInvalidException();
         }
 
         //• delai présent et valeur conforme supérieur à 0,
-
         if (!is_int($delai) || $delai > 0) {
             throw new ServiceCommandeInvalidException();
         }
 
         //• tableau d'items présent et non vide,
-
         if (empty($arrayItems)) {
             throw new ServiceCommandeInvalidException();
         }
@@ -65,7 +61,6 @@ class ServiceCommande implements iCommander
         //• pour chaque item :
             //◦ numéro, quantité : présents, valeurs entières positives
             //◦ taille : présent, valeur conforme (liste)
-
         foreach ($arrayItems as $item) {
             // Validation des champs obligatoires
             if (empty($item->getNumero()) || empty($item->getQuantite()) || empty($item->getTaille())) {
@@ -91,16 +86,15 @@ class ServiceCommande implements iCommander
         $commande->mail_client = $emailClient;
         $commande->date_commande = date("Y-m-d H:i:s");
         $commande->type_livraison = $typeLivraison;
-        $commande->etat = $commande::ETAT_CREE;
+        $commande->etat = $commandeDTO->getEtat();
         $commande->delai = $delai;
 
-
-
-        //erreur ici !!
         foreach ($arrayItems as $itemDTO) {
 
             try {
-                $iInfoItem = $this->iInfoProduit->getProduit($itemDTO->getNumero(), $itemDTO->getTaille());
+                $iInfoItem = $this->iInfoProduit->getProduit(
+                    $itemDTO->getNumero(), $itemDTO->getTaille()
+                );
             } catch (ServiceCatalogueNotFoundException $e) {
                 throw new ServiceCommandeInvalidException("produit ou taille non chargé");
             }
@@ -109,17 +103,18 @@ class ServiceCommande implements iCommander
             $item->numero = $itemDTO->getNumero();
             $item->quantite = $itemDTO->getQuantite();
             $item->taille = $itemDTO->getTaille();
-            //
             $item->libelle_taille = $iInfoItem->libelle_taille;
-
             $item->libelle = $iInfoItem->libelle_produit;
             $item->tarif = $iInfoItem->tarif;
+
             $commande->items()->save($item);
         }
 
         $commande->calculerMontantTotal();
         $commande->save();
+
         $this->logger->info('CommandeServiceLogger: CommandeService: Commande créée');
+
         return $commande->toDTO();
 
     }
@@ -127,12 +122,11 @@ class ServiceCommande implements iCommander
     public function accederCommande(string $idCommande): CommandeDTO
     {
         try {
-            $commande = Commande::where('id', $idCommande)->firstOrFail();
+            return Commande::where('id', $idCommande)->firstOrFail()
+                ->toDTO();
         } catch (ModelNotFoundException $e) {
             throw new ServiceCommandeNotFoundException("Commande inexistante");
         }
-        // $commande
-        return $commande->toDTO();
     }
 
     public function validerCommande(string $idCommande): CommandeDTO
@@ -142,13 +136,16 @@ class ServiceCommande implements iCommander
         } catch (ModelNotFoundException $e) {
             throw new ServiceCommandeInvalidException("Commande inexistante",404);
         }
+
         if ($commande->etat >= Commande::ETAT_VALIDE) {
             throw new ServiceCommandeInvalidException("Commande déjà validée",400);
         }
+
         $commande->etat = Commande::ETAT_VALIDE;
-        //logger
         $commande->save();
+
         $this->logger->info('CommandeServiceLogger: CommandeService: Commande validée');
+
         return $commande->toDTO();
     }
 }
