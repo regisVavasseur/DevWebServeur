@@ -6,6 +6,8 @@ use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Firebase\JWT\SignatureInvalidException;
+use pizzashop\shop\domain\service\catalogue\JwtManagerExpiredTokenException;
+use pizzashop\shop\domain\service\catalogue\JwtManagerInvalidTokenException;
 use Respect\Validation\Exceptions\DomainException;
 use UnexpectedValueException;
 
