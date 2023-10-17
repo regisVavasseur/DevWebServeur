@@ -26,6 +26,9 @@ class ServiceCommande implements iCommander
         $this->logger = $logger;
     }
 
+    /**
+     * @throws ServiceCommandeInvalidException
+     */
     public function creerCommande(CommandeDTO $commandeDTO): CommandeDTO
     {
         //exercice 4 - Validation infos commande
