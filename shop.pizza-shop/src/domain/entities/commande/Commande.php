@@ -20,8 +20,11 @@ class Commande extends \Illuminate\Database\Eloquent\Model
     protected $table = 'commande';
     protected $primaryKey = 'id';
     protected $keyType = 'string';
+
+    public $incrementing = false;
+
     public $timestamps = false;
-    protected $fillable = [ 'delai, date_commande, type_livraison, etat, montant_total, id_client'];
+    protected $fillable = ['id' ,'delai, date_commande, type_livraison, etat, montant_total, id_client'];
 
     public function calculerMontantTotal(): float {
         $montantTotal = 0;
