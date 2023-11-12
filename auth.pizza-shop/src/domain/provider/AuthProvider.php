@@ -1,15 +1,13 @@
 <?php
 
-namespace domain\provider;
+namespace pizzashop\auth\api\domain\provider;
 
-use domain\entites\User;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use pizzashop\shop\domain\service\catalogue\AuthProviderCredentialsException;
+use pizzashop\auth\api\domain\entites\User;
 
 class AuthProvider
 {
-
     private User $currentAuthenticatedUserEntity;
 
     /**
@@ -18,7 +16,7 @@ class AuthProvider
     private function generateRefreshToken(User $user): void
     {
         $user->refresh_token = bin2hex(random_bytes(32));
-        $user->refresh_token_expiration = date('Y-m-d H:i:s', time() + 3600);
+        $user->refresh_token_expiration_date = date('Y-m-d H:i:s', time() + 3600);
         $user->save();
     }
 
@@ -26,32 +24,39 @@ class AuthProvider
      * @throws AuthProviderCredentialsException
      * @throws Exception
      */
-    public function checkCredentials(string $username, string $password): void
+    public function checkCredentials(string $email, string $password): void
     {
         try {
-            $user = User::where('email', $username)->firstOrFail();
+            $user = User::where('email', $email)->firstOrFail();
+
+            if (!password_verify($password, $user->password)) {
+                throw new AuthProviderCredentialsException("Wrong password");
+            }
+
+            $this->generateRefreshToken($user);
+            $this->currentAuthenticatedUserEntity = $user;
 
         } catch (ModelNotFoundException $e) {
             throw new AuthProviderCredentialsException("User not found");
         }
+    }
 
-        if (!password_verify($password, $user->password)) {
-            throw new AuthProviderCredentialsException("Wrong password");
-        } else {
+    public function checkRefreshToken(string $refreshToken): void
+    {
+        try {
+            $user = User::where('refresh_token', $refreshToken)->firstOrFail();
+            if (new \DateTime() > new \DateTime($user->refresh_token_expiration_date)) {
+                throw new AuthProviderTokenException("Refresh token expired");
+            }
+            // Refresh token is valid, proceed with refreshing the token.
             $this->generateRefreshToken($user);
             $this->currentAuthenticatedUserEntity = $user;
-
+        } catch (ModelNotFoundException $e) {
+            throw new AuthProviderTokenException("Invalid refresh token");
         }
-
-
     }
 
-    public function checkToken(string $token): void
-    {
-
-    }
-
-    public function register(string $username, string $password): void
+    public function register(string $email, string $password): void
     {
 
     }
@@ -69,7 +74,7 @@ class AuthProvider
     public function getAuthenticatedUser(): array
     {
         return [
-            'username' => $this->currentAuthenticatedUserEntity->userName,
+            'username' => $this->currentAuthenticatedUserEntity->username,
             'email' => $this->currentAuthenticatedUserEntity->email,
             'refresh_token' => $this->currentAuthenticatedUserEntity->refresh_token,
         ];

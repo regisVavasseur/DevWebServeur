@@ -1,13 +1,12 @@
 <?php
 
-namespace domain\service\auth;
+namespace pizzashop\auth\api\domain\service\auth;
 
-use domain\dto\CredentialsDTO;
-use domain\dto\TokenDTO;
-use domain\dto\UserDTO;
+use pizzashop\auth\api\domain\dto\CredentialsDTO;
+use pizzashop\auth\api\domain\dto\TokenDTO;
+use pizzashop\auth\api\domain\dto\UserDTO;
 
-interface AuthServiceInterface
-{
+interface AuthServiceInterface {
     public function signup(CredentialsDTO $credentialsDTO): UserDTO;
     public function signin(CredentialsDTO $credentialsDTO): TokenDTO;
     public function validate(TokenDTO $tokenDTO): UserDTO;

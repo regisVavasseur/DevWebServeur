@@ -1,19 +1,17 @@
 <?php
 
-namespace domain\service\auth;
+namespace pizzashop\auth\api\domain\service\auth;
 
-use domain\dto\CredentialsDTO;
-use domain\dto\TokenDTO;
-use domain\dto\UserDTO;
-use domain\provider\AuthProvider;
-use domain\provider\JwtManager;
-use pizzashop\shop\domain\service\catalogue\AuthProviderCredentialsException;
-use pizzashop\shop\domain\service\catalogue\AuthProviderRefreshTokenException;
-use pizzashop\shop\domain\service\catalogue\AuthServiceValidateException;
-use pizzashop\shop\domain\service\catalogue\JwtManagerException;
-use pizzashop\shop\domain\service\catalogue\JwtManagerExpiredTokenException;
-use pizzashop\shop\domain\service\catalogue\JwtManagerInvalidTokenException;
+use pizzashop\auth\api\domain\dto\CredentialsDTO;
+use pizzashop\auth\api\domain\dto\TokenDTO;
+use pizzashop\auth\api\domain\dto\UserDTO;
+use pizzashop\auth\api\domain\provider\AuthProvider;
+use pizzashop\auth\api\domain\provider\AuthServiceCredentialsException;
+use pizzashop\auth\api\domain\provider\JwtManager;
 use Psr\Log\LoggerInterface;
+use pizzashop\auth\api\domain\provider\AuthProviderCredentialsException;
+use pizzashop\auth\api\domain\provider\JwtManagerExpiredTokenException;
+use pizzashop\auth\api\domain\provider\JwtManagerInvalidTokenException;
 
 class AuthService implements AuthServiceInterface
 {
@@ -28,63 +26,58 @@ class AuthService implements AuthServiceInterface
         $this->logger = $logger;
     }
 
-    /**
-     * @throws AuthServiceSignupException
-     */
     public function signup(CredentialsDTO $credentialsDTO): UserDTO
     {
-        try {
-            $this->authProvider->register($credentialsDTO->email, $credentialsDTO->password);
-        } catch (AuthProviderSignupException $e) {
-            $this->logger->warning($e->getMessage());
-            throw new AuthServiceSignupException($e->getMessage());
-        }
+        // This feature is not yet implemented as per the exercise.
     }
 
-    /**
-     * @throws AuthServiceCredentialsException
-     */
     public function signin(CredentialsDTO $credentialsDTO): TokenDTO
     {
         try {
             $this->authProvider->checkCredentials($credentialsDTO->email, $credentialsDTO->password);
+            $user = $this->authProvider->getAuthenticatedUser(); // Assuming this returns an array of user data.
+            $jwt = $this->jwtManager->create(['username' => $user['username'], 'email' => $user['email']]);
+            return new TokenDTO($jwt, $user['refresh_token']);
         } catch (AuthProviderCredentialsException $e) {
-            $this->logger->warning('auth attent failed for '.$credentialsDTO->email.' : '.$e->getMessage());
+            $this->logger->warning('Auth attempt failed for ' . $credentialsDTO->email . ' : ' . $e->getMessage());
             throw new AuthServiceCredentialsException($e->getMessage());
         }
     }
 
-    /**
-     * @throws AuthServiceValidateException
-     * @throws JwtManagerInvalidTokenException
-     * @throws JwtManagerExpiredTokenException
-     */
     public function validate(TokenDTO $tokenDTO): UserDTO
     {
         try {
             $payload = $this->jwtManager->validate($tokenDTO->token);
-        } catch (JwtManagerException $e) {
-            throw new AuthServiceValidateException("Expired jwt token, try refreshing it");
+            return new UserDTO($payload);
+        } catch (JwtManagerExpiredTokenException $e) {
+            $this->logger->warning('JWT expired: ' . $e->getMessage());
+            throw new AuthServiceValidateException('Expired jwt token, try refreshing it');
+        } catch (JwtManagerInvalidTokenException $e) {
+            $this->logger->warning('Invalid JWT: ' . $e->getMessage());
+            throw new AuthServiceValidateException('Invalid jwt token');
         }
-
     }
 
     public function refresh(TokenDTO $tokenDTO): TokenDTO
     {
         try {
-            $this->authProvider->checkToken($tokenDTO->refreshToken);
+            $this->authProvider->checkRefreshToken($tokenDTO->refreshToken); // This method is now in line with earlier provided code.
+            $user = $this->authProvider->getAuthenticatedUser(); // Assuming this returns an array of user data.
+            $newJwt = $this->jwtManager->create(['username' => $user['username'], 'email' => $user['email']]);
+            return new TokenDTO($newJwt, $user['refresh_token']);
         } catch (AuthProviderRefreshTokenException $e) {
-            $this->logger->warning("failed JWT refresh");
+            $this->logger->warning("Failed JWT refresh: " . $e->getMessage());
+            throw new AuthServiceCredentialsException('Refresh token invalid or expired');
         }
     }
 
     public function activate_signup(TokenDTO $tokenDTO): void
     {
-
+        // This feature is not yet implemented as per the exercise.
     }
 
     public function reset_password(TokenDTO $tokenDTO, CredentialsDTO $credentialsDTO): void
     {
-
+        // This feature is not yet implemented as per the exercise.
     }
 }

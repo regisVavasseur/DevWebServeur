@@ -1,9 +1,17 @@
 <?php
 
-namespace domain\dto;
+namespace pizzashop\auth\api\domain\dto;
+
+namespace pizzashop\auth\api\domain\dto;
 
 class TokenDTO
 {
+    public string $token;
+    public string $refreshToken;
 
-    public string $token, $refreshToken;
+    public function __construct(string $token, string $refreshToken)
+    {
+        $this->token = $token;
+        $this->refreshToken = $refreshToken;
+    }
 }

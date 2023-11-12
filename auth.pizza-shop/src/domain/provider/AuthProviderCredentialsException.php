@@ -1,6 +1,6 @@
 <?php
 
-namespace pizzashop\shop\domain\service\catalogue;
+namespace pizzashop\auth\api\domain\provider;
 
 class AuthProviderCredentialsException extends \Exception
 {
