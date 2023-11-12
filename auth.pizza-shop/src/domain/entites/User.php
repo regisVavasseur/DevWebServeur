@@ -25,5 +25,9 @@ class User extends Model
         'refresh_token',
         'reset_passwd_token'
     ];
+
+    protected $primaryKey = 'email';
+    public $incrementing = false;
+
     public $timestamps = false;
 }

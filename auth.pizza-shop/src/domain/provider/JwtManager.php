@@ -14,10 +14,11 @@ class JwtManager
     private int $expirationTime;
     private string $issuer;
 
-    public function __construct(string $secret, int $expirationTime)
+    public function __construct(string $secret, int $expirationTime, string $issuer)
     {
         $this->secret = $secret;
         $this->expirationTime = $expirationTime;
+        $this->issuer = $issuer;
     }
 
     public function create(array $payload): string
