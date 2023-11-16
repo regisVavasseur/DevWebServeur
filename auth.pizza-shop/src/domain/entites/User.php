@@ -1,6 +1,6 @@
 <?php
 
-namespace domain\entites;
+namespace pizzashop\auth\api\domain\entites;
 
 use Illuminate\Database\Eloquent\Model;
 
