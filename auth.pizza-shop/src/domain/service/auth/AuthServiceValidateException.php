@@ -1,6 +1,6 @@
 <?php
 
-namespace pizzashop\shop\domain\service\catalogue;
+namespace pizzashop\auth\api\domain\service\auth;
 
 class AuthServiceValidateException extends \Exception
 {

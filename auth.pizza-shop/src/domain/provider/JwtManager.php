@@ -1,14 +1,11 @@
 <?php
 
-namespace domain\provider;
+namespace pizzashop\auth\api\domain\provider;
 
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Firebase\JWT\SignatureInvalidException;
-use pizzashop\shop\domain\service\catalogue\JwtManagerExpiredTokenException;
-use pizzashop\shop\domain\service\catalogue\JwtManagerInvalidTokenException;
-use Respect\Validation\Exceptions\DomainException;
 use UnexpectedValueException;
 
 class JwtManager
@@ -17,41 +14,42 @@ class JwtManager
     private int $expirationTime;
     private string $issuer;
 
-    public function __construct(string $secret, int $expirationTime)   {
+    public function __construct(string $secret, int $expirationTime, string $issuer)
+    {
         $this->secret = $secret;
         $this->expirationTime = $expirationTime;
+        $this->issuer = $issuer;
     }
 
-    public function create(array $payload): string {
-        $token = JWT::encode([
-            'iss' => $this->issuer,
-            'iat' => time(),
-            'exp' => time() + $this->expirationTime,
-            'upr' => $payload
-        ], $this->secret, 'HS512');
+    public function create(array $payload): string
+    {
+        $issuedAt = time();
+        // Signing with HS512 algorithm
 
-        return $token;
+        return JWT::encode([
+            'iss' => $this->issuer,
+            'iat' => $issuedAt,
+            'exp' => $issuedAt + $this->expirationTime, // Issue time + expiration
+            'upr' => $payload // User profile data
+        ], $this->secret, 'HS512');
     }
 
     /**
-     * @throws JwtManagerInvalidTokenException
      * @throws JwtManagerExpiredTokenException
+     * @throws JwtManagerInvalidTokenException
      */
-    public function validate(string $jwtToken): array {
+    public function validate(string $jwtToken): array
+    {
         try {
-            $jwtToken = JWT::decode($jwtToken,new Key($this->secret, 'HS512'));
-        } catch (ExpiredException $e){
+            $decoded = JWT::decode($jwtToken, new Key($this->secret, 'HS512'));
+            return (array)$decoded->upr; // Return user profile from token
+        } catch (ExpiredException $e) {
             throw new JwtManagerExpiredTokenException("Expired jwt token");
-        } catch (SignatureInvalidException| UnexpectedValueException | DomainException $e){
+        } catch (SignatureInvalidException | UnexpectedValueException $e) {
             throw new JwtManagerInvalidTokenException("Invalid jwt token");
         }
-
-        return (array) $jwtToken->upr;
     }
 
-    /**
-     * @param string $issuer
-     */
     public function setIssuer(string $issuer): void
     {
         $this->issuer = $issuer;

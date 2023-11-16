@@ -1,6 +1,6 @@
 <?php
 
-namespace domain\service\auth;
+namespace pizzashop\auth\api\domain\provider;
 
 class AuthProviderSignupException extends \Exception
 {
