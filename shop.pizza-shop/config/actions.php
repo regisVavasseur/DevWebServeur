@@ -1,5 +1,6 @@
 <?php
 
+use pizzashop\shop\app\action\AuthRefresh;
 use pizzashop\shop\app\action\AuthSignin;
 use pizzashop\shop\app\action\AuthValidate;
 use pizzashop\shop\app\action\GetCommandeAction;
@@ -22,4 +23,6 @@ return [
     AuthSignin::class => fn(ContainerInterface $container) => new AuthSignin($container->get('uri.auth')),
 
     AuthValidate::class => fn(ContainerInterface $container) => new AuthValidate($container->get('uri.auth')),
+
+    AuthRefresh::class => fn(ContainerInterface $container) => new AuthRefresh($container->get('uri.auth')),
 ];

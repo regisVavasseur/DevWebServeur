@@ -26,6 +26,7 @@ class AuthSignin extends Action
 
         $client = new Client([
             'base_uri' => $this->uri,
+            'timeout' => 20.0,
         ]);
 
         $responseApiAuth = $client->request('POST', '/api/users/signin', [

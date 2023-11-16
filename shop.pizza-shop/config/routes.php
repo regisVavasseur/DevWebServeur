@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use pizzashop\shop\app\action\AuthRefresh;
 use pizzashop\shop\app\action\AuthSignin;
 use pizzashop\shop\app\action\AuthValidate;
 use pizzashop\shop\app\action\GetCommandeAction;
@@ -20,4 +21,6 @@ return function( App $app):void {
     $app->post('/signin[/]', AuthSignin::class)->setName('signin');
 
     $app->get('/validate[/]', AuthValidate::class)->setName('validate');
+
+    $app->get('/refresh[/]', AuthRefresh::class)->setName('refresh');
 };

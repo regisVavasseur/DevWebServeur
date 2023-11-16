@@ -7,7 +7,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class AuthValidate extends Action
+class AuthRefresh extends Action
 {
 
     private $uri;
@@ -28,7 +28,7 @@ class AuthValidate extends Action
             'timeout' => 20.0,
         ]);
 
-        $responseApiAuth = $client->request('GET', '/api/users/validate', [
+        $responseApiAuth = $client->request('GET', '/api/users/refresh', [
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
