@@ -16,15 +16,15 @@ class AuthSignin extends Action
     function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $client = new Client([
-            'base_uri' => 'localhost:2780',
+            'base_uri' => 'auth.pizza-shop.local',
             'timeout' => 2.0,
         ]);
 
         $responseApiAuth = $client->request('POST', '/api/users/signin', [
             'headers' => [
-                'Access-Control-Allow-Origin' => '*',
-                'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Headers' => 'Origin, Content-Type, X-Auth-Token',
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'connection' => 'keep-alive'
             ],
             'form_params' => [
                 'email' => $request->getParsedBody()['email'],
