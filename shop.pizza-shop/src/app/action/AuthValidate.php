@@ -7,7 +7,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class AuthSignin extends Action
+class AuthValidate extends Action
 {
 
     private $uri;
@@ -22,21 +22,17 @@ class AuthSignin extends Action
      */
     function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $args = json_decode($request->getBody()->getContents(), true);
-
+        $token = $request->getHeader('Authorization')[0];
         $client = new Client([
             'base_uri' => $this->uri,
         ]);
 
-        $responseApiAuth = $client->request('POST', '/api/users/signin', [
+        $responseApiAuth = $client->request('GET', '/api/users/validate', [
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
-                'connection' => 'keep-alive'
-            ],
-            'json' => [
-                'email' => $args['email'],
-                'password' => $args['password']
+                'connection' => 'keep-alive',
+                'Authorization' => $token
             ]
         ]);
 
