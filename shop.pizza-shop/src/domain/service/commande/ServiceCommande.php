@@ -5,7 +5,6 @@ namespace pizzashop\shop\domain\service\commande;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use pizzashop\shop\domain\dto\commande\CommandeDTO;
 use pizzashop\shop\domain\entities\catalogue\Produit;
-use pizzashop\shop\domain\entities\catalogue\Taille;
 use pizzashop\shop\domain\entities\commande\Commande;
 use pizzashop\shop\domain\entities\commande\Item;
 use pizzashop\shop\domain\service\catalogue\iInfoProduit;
