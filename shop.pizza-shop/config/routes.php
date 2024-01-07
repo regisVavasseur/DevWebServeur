@@ -5,6 +5,9 @@ use pizzashop\shop\app\action\AuthRefresh;
 use pizzashop\shop\app\action\AuthSignin;
 use pizzashop\shop\app\action\AuthValidate;
 use pizzashop\shop\app\action\GetCommandeAction;
+use pizzashop\shop\app\action\GetProduitByIdAction;
+use pizzashop\shop\app\action\GetProduitsAction;
+use pizzashop\shop\app\action\GetProduitsByCategAction;
 use pizzashop\shop\app\action\PatchValiderCommandeAction;
 use pizzashop\shop\app\action\PostCreerCommandeAction;
 use Slim\App;
@@ -23,4 +26,10 @@ return function( App $app):void {
     $app->get('/validate[/]', AuthValidate::class)->setName('validate');
 
     $app->get('/refresh[/]', AuthRefresh::class)->setName('refresh');
+
+    $app->get('/produits[/]', GetProduitsAction::class)->setName('produits');
+
+    $app->get('/produit/{id}[/]', GetProduitByIdAction::class)->setName('produit');
+
+    $app->get('/categories/{id_categorie}/produits[/]', GetProduitsByCategAction::class)->setName('produits_by_categ');
 };
