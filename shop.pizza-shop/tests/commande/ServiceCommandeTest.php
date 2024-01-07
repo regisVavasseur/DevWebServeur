@@ -69,13 +69,12 @@ class ServiceCommandeTest extends \PHPUnit\Framework\TestCase {
 
                 $Random_Produit = self::$serviceProduits->getProduit(
                     self::$faker->numberBetween(1, 10),
-                    self::$faker->numberBetween(1, 2)
                 );
 
                 $commandeDTO->addItem(
                     new ItemDTO(
-                        $Random_Produit->numero_produit,
-                        Taille::where('libelle', $Random_Produit->libelle_taille)->first()->id,
+                        $Random_Produit->numero,
+                        Taille::where('id', self::$faker->numberBetween(1, 2))->first()->id,
                         self::$faker->numberBetween(1, 5)
                     )
                 );

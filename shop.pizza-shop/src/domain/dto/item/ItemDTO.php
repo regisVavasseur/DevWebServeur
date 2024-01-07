@@ -8,12 +8,12 @@ use pizzashop\shop\domain\entities\catalogue\Taille;
 
 class ItemDTO extends DTO
 {
-    private int $numero;
-    private string $libelle;
-    private int $taille;
-    private string $libelle_taille;
-    private float $tarif;
-    private int $quantite;
+    public int $numero;
+    public string $libelle;
+    public int $taille;
+    public string $libelle_taille;
+    public float $tarif;
+    public int $quantite;
 
     public function __construct(int $numero, int $taille, int $quantite)
     {
@@ -90,18 +90,6 @@ class ItemDTO extends DTO
     public function setTarif(float $tarif): void
     {
         $this->tarif = $tarif;
-    }
-
-    public function toArray(): array
-    {
-        return [
-            'numero' => $this->numero,
-            'libelle' => $this->libelle,
-            'taille' => $this->taille,
-            'quantite' => $this->quantite,
-            'libelle_taille' => $this->libelle_taille,
-            'tarif' => $this->tarif
-        ];
     }
 
 }

@@ -90,21 +90,13 @@ class ServiceCommande implements iCommander
 
         foreach ($arrayItems as $itemDTO) {
 
-            try {
-                $iInfoItem = $this->iInfoProduit->getProduit(
-                    $itemDTO->getNumero(), $itemDTO->getTaille()
-                );
-            } catch (ServiceCatalogueNotFoundException $e) {
-                throw new ServiceCommandeInvalidException("produit ou taille non chargé");
-            }
-
             $item = new Item();
             $item->numero = $itemDTO->getNumero();
             $item->quantite = $itemDTO->getQuantite();
             $item->taille = $itemDTO->getTaille();
-            $item->libelle_taille = $iInfoItem->libelle_taille;
-            $item->libelle = $iInfoItem->libelle_produit;
-            $item->tarif = $iInfoItem->tarif;
+            $item->libelle_taille = $itemDTO->getLibelleTaille();
+            $item->libelle = $itemDTO->getLibelle();
+            $item->tarif = $itemDTO->getTarif();
 
             $commande->items()->save($item);
         }

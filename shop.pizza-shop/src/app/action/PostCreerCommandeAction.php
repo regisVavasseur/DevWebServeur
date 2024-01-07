@@ -92,7 +92,7 @@ class PostCreerCommandeAction
 
         $dataJson = [
             'type' => 'resource',
-            'commande' => $commandeDTO2->toArray()
+            'commande' => $commandeDTO2
         ];
 
         $response->getBody()->write(

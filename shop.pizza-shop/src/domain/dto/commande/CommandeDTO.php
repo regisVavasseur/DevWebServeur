@@ -9,21 +9,21 @@ use pizzashop\shop\domain\entities\commande\Commande;
 class CommandeDTO extends DTO
 {
 
-    private string $id;
-    private int $delai;
-    private string $date;
-    private int $type_livraison;
-    private int $etat;
-    private float $montant;
-    private string $mail_client;
+    public string $id;
+    public int $delai;
+    public string $date;
+    public int $type_livraison;
+    public int $etat;
+    public float $montant;
+    public string $mail_client;
 
-    private array $itemsDTO;
+    public array $items;
 
     public function __construct(int $type_livraison, string $mail_client, array $itemsDTO, int $etat=Commande::ETAT_CREE)
     {
         $this->type_livraison = $type_livraison;
         $this->mail_client = $mail_client;
-        $this->itemsDTO = $itemsDTO;
+        $this->items = $itemsDTO;
         $this->delai = 0;
         $this->etat = $etat;
     }
@@ -80,12 +80,12 @@ class CommandeDTO extends DTO
 
     public function getItemsDTO(): array
     {
-        return $this->itemsDTO;
+        return $this->items;
     }
 
     public function setItemsDTO(array $itemsDTO): void
     {
-        $this->itemsDTO = $itemsDTO;
+        $this->items = $itemsDTO;
     }
 
     public function getMontant() : float {
@@ -93,7 +93,7 @@ class CommandeDTO extends DTO
     }
 
     public function addItem(ItemDTO $item) : void {
-        $this->itemsDTO[] = $item;
+        $this->items[] = $item;
     }
 
     public function setMontant(float|int $total_price)
@@ -113,30 +113,10 @@ class CommandeDTO extends DTO
 
     public function calculerMontant() : void {
         $total_price = 0;
-        foreach ($this->itemsDTO as $item) {
+        foreach ($this->items as $item) {
             $total_price += $item->getPrix();
         }
         $this->montant = $total_price;
     }
-
-    public function toArray(): array
-    {
-        $items = [];
-        foreach ($this->itemsDTO as $item) {
-            $items[] = $item->toArray();
-        }
-
-        return [
-            'id' => $this->id,
-            'date' => $this->date,
-            'type_livraison' => $this->type_livraison,
-            'mail_client' => $this->mail_client,
-            'montant' => $this->montant,
-            'delai' => $this->delai,
-            'items' => $items,
-            'etat' => $this->etat
-        ];
-    }
-
 
 }
