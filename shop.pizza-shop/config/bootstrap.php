@@ -1,5 +1,6 @@
 <?php
 
+use pizzashop\shop\domain\middlewares\Cors;
 use pizzashop\shop\domain\utils\Eloquent;
 use Slim\Factory\AppFactory;
 
@@ -14,6 +15,7 @@ $builder->addDefinitions($depedencies);
 $builder->addDefinitions($actions);
 $container = $builder->build();
 $app = AppFactory::createFromContainer($container);
+$app->add(new Cors());
 $app->addBodyParsingMiddleware();
 
 $app->addRoutingMiddleware();
