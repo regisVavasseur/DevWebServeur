@@ -17,7 +17,10 @@ return [
         return new PatchValiderCommandeAction($container->get('commande.service'));
     },
     PostCreerCommandeAction::class => function (ContainerInterface $container) {
-        return new PostCreerCommandeAction($container->get('commande.service'));
+        return new PostCreerCommandeAction(
+            $container->get('commande.service'),
+            $container->get('uri.auth')
+        );
     },
 
     AuthSignin::class => fn(ContainerInterface $container) => new AuthSignin($container->get('uri.auth')),
