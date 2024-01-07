@@ -8,7 +8,7 @@ https://github.com/regisVavasseur/DevWebServeur.git
 - Régis Vavasseur
 - Elian Guiffault
 - Yvann Quilliard
-- Maxime Carlier (Abandon)
+- Maxime Carlier
 
 ## Fonctionnalités
 
