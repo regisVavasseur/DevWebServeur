@@ -16,4 +16,12 @@ class Taille extends \Illuminate\Database\Eloquent\Model
         return $this->belongsToMany(Produit::class, 'tarif', 'taille_id', 'produit_id');
     }
 
+    public function toDTO(): \pizzashop\shop\domain\dto\catalogue\TailleDTO
+    {
+        return new \pizzashop\shop\domain\dto\catalogue\TailleDTO(
+            $this->id,
+            $this->libelle
+        );
+    }
+
 }

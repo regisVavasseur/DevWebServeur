@@ -99,7 +99,7 @@ class ItemDTO extends DTO
             'libelle' => $this->libelle,
             'taille' => $this->taille,
             'quantite' => $this->quantite,
-            'libelle taille' => $this->libelle_taille,
+            'libelle_taille' => $this->libelle_taille,
             'tarif' => $this->tarif
         ];
     }

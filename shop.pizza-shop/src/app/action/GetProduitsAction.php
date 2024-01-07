@@ -8,6 +8,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpNotFoundException;
+use Slim\Routing\RouteContext;
 
 class GetProduitsAction
 {
@@ -24,16 +25,25 @@ class GetProduitsAction
         try {
             $products = $this->produit->getProduits();
 
-            $productData = array_map(function ($product) {
-                return [
-                    'id' => $product->getId(),
-                    'name' => $product->getName(),
-                    'price' => $product->getPrice(),
-                    'uri' => '/products/' . $product->getId()
-                ];
-            }, $products);
+            $responseJson = [
+                'type' => 'resource',
 
-            $response->getBody()->write(json_encode($productData));
+                'produits' => array_map(
+                     function ($produit) use ($request) {
+                        return array_merge(json_decode($produit, true), [
+                            'links' => [
+                                'self' => RouteContext::fromRequest($request)->getRouteParser()->urlFor('produit', ['id' => $produit->numero])
+                            ]
+                        ]);
+                    },
+                    $products
+                ),
+                'links' => [
+                    'self' => RouteContext::fromRequest($request)->getRouteParser()->urlFor('produits'),
+                ]
+            ];
+
+            $response->getBody()->write(json_encode($responseJson));
 
             return $response->withHeader('Content-Type', 'application/json');
         } catch (ServiceCommandeNotFoundException $e) {

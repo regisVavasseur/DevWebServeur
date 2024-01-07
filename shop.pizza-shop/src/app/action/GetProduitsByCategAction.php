@@ -8,6 +8,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpNotFoundException;
+use Slim\Routing\RouteContext;
 
 class GetProduitsByCategAction
 {
@@ -21,21 +22,29 @@ class GetProduitsByCategAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $categorie = $args['categorie'] ?? '';
+        $categorie_id = $args['id_categorie'] ?? '';
 
         try {
-            $products = $this->produit->getProduitsByCategorie($categorie);
+            $products = $this->produit->getProduitsByCategorie(intval($categorie_id));
 
-            $productData = array_map(function ($product) {
-                return [
-                    'id' => $product->getId(),
-                    'name' => $product->getName(),
-                    'price' => $product->getPrice(),
-                    'uri' => '/products/' . $product->getId()
-                ];
-            }, $products);
+            $responseJson = [
+                'type' => 'resource',
+                'produits' => array_map(
+                    function ($produit) use ($request) {
+                        return array_merge(json_decode($produit, true), [
+                            'links' => [
+                                'self' => RouteContext::fromRequest($request)->getRouteParser()->urlFor('produit', ['id' => $produit->numero])
+                            ]
+                        ]);
+                    },
+                    $products
+                ),
+                'links' => [
+                    'self' => RouteContext::fromRequest($request)->getRouteParser()->urlFor('produits_by_categ', ['id_categorie' => $categorie_id]),
+                ]
+            ];
 
-            $response->getBody()->write(json_encode($productData));
+            $response->getBody()->write(json_encode($responseJson));
 
             return $response->withHeader('Content-Type', 'application/json');
         } catch (ServiceCommandeNotFoundException $e) {

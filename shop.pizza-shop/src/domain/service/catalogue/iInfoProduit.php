@@ -6,9 +6,9 @@ use pizzashop\shop\domain\dto\catalogue\ProduitDTO;
 
 interface iInfoProduit
 {
-    public function getProduit(int $num, int $taille): ProduitDTO;
+    public function getProduit(int $num): ProduitDTO;
     public function getProduits(): array;
-    public function getProduitsByCategorie(string $categorie): array;
-    public function getProduitById(int $id): ProduitDTO;
+    public function getProduitsByCategorie(int $categorie_id): array;
+    public function getProduitByNumero(int $numero): ProduitDTO;
 
 }

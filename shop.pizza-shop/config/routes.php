@@ -5,7 +5,7 @@ use pizzashop\shop\app\action\AuthRefresh;
 use pizzashop\shop\app\action\AuthSignin;
 use pizzashop\shop\app\action\AuthValidate;
 use pizzashop\shop\app\action\GetCommandeAction;
-use pizzashop\shop\app\action\GetProduitByIdAction;
+use pizzashop\shop\app\action\GetProduitByNumeroAction;
 use pizzashop\shop\app\action\GetProduitsAction;
 use pizzashop\shop\app\action\GetProduitsByCategAction;
 use pizzashop\shop\app\action\PatchValiderCommandeAction;
@@ -29,7 +29,7 @@ return function( App $app):void {
 
     $app->get('/produits[/]', GetProduitsAction::class)->setName('produits');
 
-    $app->get('/produit/{id}[/]', GetProduitByIdAction::class)->setName('produit');
+    $app->get('/produit/{id}[/]', GetProduitByNumeroAction::class)->setName('produit');
 
     $app->get('/categories/{id_categorie}/produits[/]', GetProduitsByCategAction::class)->setName('produits_by_categ');
 };

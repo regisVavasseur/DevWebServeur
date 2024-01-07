@@ -5,19 +5,22 @@ namespace pizzashop\shop\domain\dto\catalogue;
 class ProduitDTO extends \pizzashop\shop\domain\dto\DTO
 {
 
-    public int $numero_produit;
-    public string $libelle_produit;
-    public string $libelle_categorie;
-    public string $libelle_taille;
-    public $tarif;
+    public int $numero;
+    public string $libelle;
+    public string $description;
+    public string $image;
+    public CategorieDTO $categorie;
 
-    public function __construct(int $numero_produit, string $libelle_produit, string $libelle_categorie, string $libelle_taille, $tarif)
+    public array $tarifs;
+
+    public function __construct(int $numero, string $libelle, string $description, string $image, CategorieDTO $categorie, array $tarifs)
     {
-        $this->numero_produit = $numero_produit;
-        $this->libelle_produit = $libelle_produit;
-        $this->libelle_categorie = $libelle_categorie;
-        $this->libelle_taille = $libelle_taille;
-        $this->tarif = $tarif;
+        $this->numero = $numero;
+        $this->libelle = $libelle;
+        $this->description = $description;
+        $this->image = $image;
+        $this->categorie = $categorie;
+        $this->tarifs = $tarifs;
     }
 
 }

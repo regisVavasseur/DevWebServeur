@@ -32,4 +32,18 @@ class Produit extends \Illuminate\database\eloquent\Model
         return $this->hasMany(Tarif::class, 'produit_id');
     }
 
+    public function toDTO(): ProduitDTO
+    {
+        return new ProduitDTO(
+            $this->numero,
+            $this->libelle,
+            $this->description,
+            $this->image,
+            $this->categorie()->firstOrFail()->toDTO(),
+            $this->tarif()->get()->map(function ($tarif) {
+                return $tarif->toDTO();
+            })->toArray()
+        );
+    }
+
 }

@@ -8,8 +8,9 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpNotFoundException;
+use Slim\Routing\RouteContext;
 
-class GetProduitByIdAction
+class GetProduitByNumeroAction
 {
 
     private iInfoProduit $produit;
@@ -24,9 +25,17 @@ class GetProduitByIdAction
         $id = $args['id'] ?? 0;
 
         try {
-            $product = $this->produit->getProduitById($id);
+            $product = $this->produit->getProduitByNumero($id);
 
-            $response->getBody()->write(json_encode($product));
+            $reponseJson = [
+                'type' => 'resource',
+                'produit' => $product,
+                'links' => [
+                    'self' => RouteContext::fromRequest($request)->getRouteParser()->urlFor('produit', ['id' => $product->numero]),
+                ]
+            ];
+
+            $response->getBody()->write(json_encode($reponseJson));
 
             return $response->withHeader('Content-Type', 'application/json');
         } catch (ServiceCommandeNotFoundException $e) {
@@ -34,12 +43,6 @@ class GetProduitByIdAction
         } catch (ContainerExceptionInterface $e) {
             throw new HttpNotFoundException($request, $e->getMessage());
         }
-
-
-
-
-       
-
 
     }
 }
