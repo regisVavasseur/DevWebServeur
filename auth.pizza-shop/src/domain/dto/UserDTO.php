@@ -6,6 +6,7 @@ class UserDTO
 {
     public string $email;
     public string $username;
+    public string $password;
     public string $activationToken;
     public ?string $activationTokenExpirationDate; // Optional as it can be null
     public ?string $refreshToken; // Optional as it can be null

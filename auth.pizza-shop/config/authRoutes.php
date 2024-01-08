@@ -1,5 +1,6 @@
 <?php
 
+use pizzashop\auth\api\app\actions\SignUpAction;
 use Slim\App;
 use pizzashop\auth\api\app\actions\SignInAction;
 use pizzashop\auth\api\app\actions\ValidateTokenAction;
@@ -10,5 +11,6 @@ return function(App $app) {
         $group->post('/signin', SignInAction::class);
         $group->get('/validate', ValidateTokenAction::class);
         $group->post('/refresh', RefreshTokenAction::class);
+        $group->post('/signup', SignUpAction::class);
     });
 };

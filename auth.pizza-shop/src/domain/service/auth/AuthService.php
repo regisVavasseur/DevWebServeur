@@ -5,6 +5,7 @@ namespace pizzashop\auth\api\domain\service\auth;
 use pizzashop\auth\api\domain\dto\CredentialsDTO;
 use pizzashop\auth\api\domain\dto\TokenDTO;
 use pizzashop\auth\api\domain\dto\UserDTO;
+use pizzashop\auth\api\domain\entites\User;
 use pizzashop\auth\api\domain\provider\AuthProvider;
 use pizzashop\auth\api\domain\provider\AuthServiceCredentialsException;
 use pizzashop\auth\api\domain\provider\JwtManager;
@@ -28,7 +29,14 @@ class AuthService implements AuthServiceInterface
 
     public function signup(CredentialsDTO $credentialsDTO): UserDTO
     {
-        // This feature is not yet implemented as per the exercise.
+        $user = User::find($credentialsDTO->email);
+        if (!is_null($user)) throw new AuthServiceCredentialsException("User already exists");
+
+        $user = new User();
+        $user->email = $credentialsDTO->email;
+        $user->password = $credentialsDTO->password;
+        $user->save();
+        return $user->toDTO();
     }
 
     public function signin(CredentialsDTO $credentialsDTO): TokenDTO
