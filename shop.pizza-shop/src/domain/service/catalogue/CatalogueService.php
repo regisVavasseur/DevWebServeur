@@ -13,11 +13,22 @@ class CatalogueService implements iInfoProduit
         return Produit::where('numero', $num)->firstOrFail()->toDTO();
     }
 
-    public function getProduits(): array
+    public function getProduits($filtre): array
     {
-        return Produit::all()->map(function ($produit) {
-            return $produit->toDTO();
-        })->toArray();
+        $produits = Produit::query();
+
+        if (isset($filtre)) {
+            $produits->where('libelle', 'like', '%' . $filtre . '%')
+                ->orWhere('description', 'like', '%' . $filtre . '%');
+        }
+
+        return $produits->get()
+            ->map(
+                function ($produit) {
+                    return $produit->toDTO();
+                }
+            )->toArray();
+
     }
 
     public function getProduitsByCategorie(int $categorie_id): array

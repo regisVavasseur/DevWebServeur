@@ -31,7 +31,7 @@ return function( App $app):void {
 
     $app->get('/refresh[/]', AuthRefresh::class)->setName('refresh');
 
-    $app->get('/produits[/]', GetProduitsAction::class)->setName('produits');
+    $app->get('/produits[/[{filtering}]]', GetProduitsAction::class)->setName('produits');
 
     $app->get('/produit/{id}[/]', GetProduitByNumeroAction::class)->setName('produit');
 
