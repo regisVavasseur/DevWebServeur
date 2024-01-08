@@ -17,6 +17,10 @@ use Slim\Routing\RouteCollectorProxy;
 
 return function( App $app):void {
 
+    $app->options('/{routes:.+}', function ($request, $response) {
+        return $response;
+    });
+
     $app->group('/commandes', function (RouteCollectorProxy $commandesGrp) use ($app) {
 
         $commandesGrp->post('[/]', PostCreerCommandeAction::class)->setName('creer_commande');
