@@ -23,11 +23,16 @@ class GetCommandeAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
+
+        //récupération du mail de l'utilisateur connecté via le middleware CheckJWT
+        // issu du token JWT présenté par le client dans le header Authorization de la requête.
+        $email = $request->getAttribute('email');
+
         $id = $args['id'] ?? 0;
 
         try {
             $service = $this->commander;
-            $commandeDto = $service->accederCommande($id);
+            $commandeDto = $service->accederCommande($id, $email);
         } catch (ServiceCommandeNotFoundException $e) {
             throw new HttpNotFoundException($request, $e->getMessage());
         } catch (NotFoundExceptionInterface|ContainerExceptionInterface $e) {

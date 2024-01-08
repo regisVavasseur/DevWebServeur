@@ -10,16 +10,28 @@ use pizzashop\shop\app\action\GetProduitsAction;
 use pizzashop\shop\app\action\GetProduitsByCategAction;
 use pizzashop\shop\app\action\PatchValiderCommandeAction;
 use pizzashop\shop\app\action\PostCreerCommandeAction;
+use pizzashop\shop\domain\middlewares\BeforeCheckJWT;
 use Slim\App;
+use Slim\Routing\RouteCollectorProxy;
 
 
 return function( App $app):void {
 
-    $app->post('/commandes[/]', PostCreerCommandeAction::class)->setName('creer_commande');
+    $app->options('/{routes:.+}', function ($request, $response) {
+        return $response;
+    });
 
-    $app->patch('/commandes/{id_commande}[/]', PatchValiderCommandeAction::class)->setName('patch_commandes');
+    $app->group('/commandes', function (RouteCollectorProxy $commandesGrp) use ($app) {
 
-    $app->get('/commandes/{id}[/]', GetCommandeAction::class)->setName('commandes');
+        $commandesGrp->post('[/]', PostCreerCommandeAction::class)->setName('creer_commande');
+
+        $commandesGrp->patch('/{id_commande}[/]', PatchValiderCommandeAction::class)->setName('patch_commandes');
+
+        $commandesGrp->get('/{id}[/]', GetCommandeAction::class)->setName('commandes');
+
+    })->add(
+        $app->getContainer()->get('checkJwt')
+    );
 
     $app->post('/signin[/]', AuthSignin::class)->setName('signin');
 
@@ -27,7 +39,7 @@ return function( App $app):void {
 
     $app->get('/refresh[/]', AuthRefresh::class)->setName('refresh');
 
-    $app->get('/produits[/]', GetProduitsAction::class)->setName('produits');
+    $app->get('/produits[/[{filtering}]]', GetProduitsAction::class)->setName('produits');
 
     $app->get('/produit/{id}[/]', GetProduitByNumeroAction::class)->setName('produit');
 
