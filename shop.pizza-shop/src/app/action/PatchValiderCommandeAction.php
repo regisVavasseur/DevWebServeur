@@ -23,6 +23,11 @@ class PatchValiderCommandeAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
+
+        //récupération du mail de l'utilisateur connecté via le middleware CheckJWT
+        // issu du token JWT présenté par le client dans le header Authorization de la requête.
+        $email = $request->getAttribute('email');
+
         $id = $args['id_commande'] ?? 0;
 
         $dataJson = [];
@@ -32,7 +37,7 @@ class PatchValiderCommandeAction
 
         try {
             $service = $this->commander;
-            $service->validerCommande($id);
+            $service->validerCommande($id, $email);
         } catch (ServiceCommandeInvalidException $e) {
             if ($e->getCode() == 400) {
                throw new HttpBadRequestException($request, $e->getMessage());
@@ -43,7 +48,7 @@ class PatchValiderCommandeAction
         }
         $dataJson['type'] = 'commande';
         $dataJson['status'] = 'success';
-        $dataJson['commande'] = $service->accederCommande($id);
+        $dataJson['commande'] = $service->accederCommande($id, $email);
 
 
         $response->getBody()->write(json_encode($dataJson));

@@ -110,20 +110,29 @@ class ServiceCommande implements iCommander
 
     }
 
-    public function accederCommande(string $idCommande): CommandeDTO
+    public function accederCommande(string $idCommande, string $email): CommandeDTO
     {
         try {
-            return Commande::where('id', $idCommande)->firstOrFail()
+            //return Commande::where('id', $idCommande)->firstOrFail()
+            //    ->toDTO();
+
+            //retourner la commande uniquement si elle appartient au client sinon retourner une erreur 404
+            return Commande::where('id', $idCommande)->where('mail_client', $email)->firstOrFail()
                 ->toDTO();
+
         } catch (ModelNotFoundException $e) {
             throw new ServiceCommandeNotFoundException("Commande inexistante");
         }
     }
 
-    public function validerCommande(string $idCommande): CommandeDTO
+    public function validerCommande(string $idCommande, string $email): CommandeDTO
     {
         try {
-            $commande = Commande::where('id', $idCommande)->firstOrFail();
+            //$commande = Commande::where('id', $idCommande)->firstOrFail();
+
+            //retourner la commande uniquement si elle appartient au client sinon retourner une erreur 404
+            $commande = Commande::where('id', $idCommande)->where('mail_client', $email)->firstOrFail();
+
         } catch (ModelNotFoundException $e) {
             throw new ServiceCommandeInvalidException("Commande inexistante",404);
         }

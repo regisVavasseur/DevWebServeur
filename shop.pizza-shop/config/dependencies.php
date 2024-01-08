@@ -4,6 +4,7 @@
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
+use pizzashop\shop\domain\middlewares\BeforeCheckJWT;
 use pizzashop\shop\domain\service\catalogue\CatalogueService;
 use pizzashop\shop\domain\service\commande\ServiceCommande;
 use Psr\Container\ContainerInterface;
@@ -20,4 +21,9 @@ return [
     'commande.service' => function(ContainerInterface $container) {
         return new ServiceCommande($container->get('catalogue.service'), $container->get('logger'));
     },
+
+    'checkJwt' => function(ContainerInterface $container) {
+        return new BeforeCheckJWT($container->get('uri.auth'));
+    },
+
 ];
