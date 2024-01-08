@@ -23,7 +23,7 @@ class GetProduitsAction
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         try {
-            $products = $this->produit->getProduits();
+            $products = $this->produit->getProduits($args['filtering'] ?? null);
 
             $responseJson = [
                 'type' => 'resource',
