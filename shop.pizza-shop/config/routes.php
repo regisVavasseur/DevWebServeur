@@ -15,6 +15,10 @@ use Slim\App;
 
 return function( App $app):void {
 
+    $app->options('/{routes:.+}', function ($request, $response) {
+        return $response;
+    });
+
     $app->post('/commandes[/]', PostCreerCommandeAction::class)->setName('creer_commande');
 
     $app->patch('/commandes/{id_commande}[/]', PatchValiderCommandeAction::class)->setName('patch_commandes');
