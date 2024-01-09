@@ -4,9 +4,9 @@
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
-use pizzashop\shop\domain\middlewares\BeforeCheckJWT;
-use pizzashop\shop\domain\service\catalogue\CatalogueService;
-use pizzashop\shop\domain\service\commande\ServiceCommande;
+use pizzashop\commande\domain\middlewares\BeforeCheckJWT;
+use pizzashop\commande\domain\service\catalogue\CatalogueService;
+use pizzashop\commande\domain\service\commande\ServiceCommande;
 use Psr\Container\ContainerInterface;
 
 return [

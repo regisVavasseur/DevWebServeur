@@ -1,8 +1,8 @@
 <?php
 
-namespace pizzashop\shop\domain\entities\catalogue;
+namespace pizzashop\commande\domain\entities\catalogue;
 
-use pizzashop\shop\domain\dto\catalogue\ProduitDTO;
+use pizzashop\commande\domain\dto\catalogue\ProduitDTO;
 
 class Produit extends \Illuminate\database\eloquent\Model
 {

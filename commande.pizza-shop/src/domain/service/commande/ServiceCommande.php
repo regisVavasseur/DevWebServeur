@@ -1,14 +1,14 @@
 <?php
 
-namespace pizzashop\shop\domain\service\commande;
+namespace pizzashop\commande\domain\service\commande;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use pizzashop\shop\domain\dto\commande\CommandeDTO;
-use pizzashop\shop\domain\entities\catalogue\Produit;
-use pizzashop\shop\domain\entities\commande\Commande;
-use pizzashop\shop\domain\entities\commande\Item;
-use pizzashop\shop\domain\service\catalogue\iInfoProduit;
-use pizzashop\shop\domain\service\catalogue\ServiceCatalogueNotFoundException;
+use pizzashop\commande\domain\dto\commande\CommandeDTO;
+use pizzashop\commande\domain\entities\catalogue\Produit;
+use pizzashop\commande\domain\entities\commande\Commande;
+use pizzashop\commande\domain\entities\commande\Item;
+use pizzashop\commande\domain\service\catalogue\iInfoProduit;
+use pizzashop\commande\domain\service\catalogue\ServiceCatalogueNotFoundException;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 

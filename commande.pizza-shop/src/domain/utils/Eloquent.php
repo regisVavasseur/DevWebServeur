@@ -1,6 +1,6 @@
 <?php
 
-namespace pizzashop\shop\domain\utils;
+namespace pizzashop\commande\domain\utils;
 
 use Illuminate\Database\Capsule\Manager as DB;
 

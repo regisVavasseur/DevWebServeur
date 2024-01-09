@@ -4,14 +4,14 @@ namespace pizzashop\tests\commande;
 
 use Faker\Factory;
 use Illuminate\Database\Capsule\Manager as DB;
-use pizzashop\shop\domain\dto\commande\CommandeDTO;
-use pizzashop\shop\domain\dto\item\ItemDTO;
-use pizzashop\shop\domain\entities\catalogue\Produit;
-use pizzashop\shop\domain\entities\catalogue\Taille;
-use pizzashop\shop\domain\entities\commande\Commande;
-use pizzashop\shop\domain\entities\commande\Item;
-use pizzashop\shop\domain\service\catalogue\CatalogueService;
-use pizzashop\shop\domain\service\commande\ServiceCommande;
+use pizzashop\commande\domain\dto\commande\CommandeDTO;
+use pizzashop\commande\domain\dto\item\ItemDTO;
+use pizzashop\commande\domain\entities\catalogue\Produit;
+use pizzashop\commande\domain\entities\catalogue\Taille;
+use pizzashop\commande\domain\entities\commande\Commande;
+use pizzashop\commande\domain\entities\commande\Item;
+use pizzashop\commande\domain\service\catalogue\CatalogueService;
+use pizzashop\commande\domain\service\commande\ServiceCommande;
 use Ramsey\Uuid\Uuid;
 
 class ServiceCommandeTest extends \PHPUnit\Framework\TestCase {

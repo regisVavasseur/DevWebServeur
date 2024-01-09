@@ -1,6 +1,6 @@
 <?php
 
-namespace pizzashop\shop\domain\entities\catalogue;
+namespace pizzashop\commande\domain\entities\catalogue;
 
 class Taille extends \Illuminate\Database\Eloquent\Model
 {
@@ -16,9 +16,9 @@ class Taille extends \Illuminate\Database\Eloquent\Model
         return $this->belongsToMany(Produit::class, 'tarif', 'taille_id', 'produit_id');
     }
 
-    public function toDTO(): \pizzashop\shop\domain\dto\catalogue\TailleDTO
+    public function toDTO(): \pizzashop\commande\domain\dto\catalogue\TailleDTO
     {
-        return new \pizzashop\shop\domain\dto\catalogue\TailleDTO(
+        return new \pizzashop\commande\domain\dto\catalogue\TailleDTO(
             $this->id,
             $this->libelle
         );

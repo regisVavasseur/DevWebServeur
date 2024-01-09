@@ -1,8 +1,8 @@
 <?php
 
-namespace pizzashop\shop\domain\service\commande;
+namespace pizzashop\commande\domain\service\commande;
 
-use pizzashop\shop\domain\dto\commande\CommandeDTO;
+use pizzashop\commande\domain\dto\commande\CommandeDTO;
 
 interface iCommander
 {

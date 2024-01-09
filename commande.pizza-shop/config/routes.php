@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use pizzashop\shop\app\action\GetCommandeAction;
-use pizzashop\shop\app\action\PatchValiderCommandeAction;
-use pizzashop\shop\app\action\PostCreerCommandeAction;
+use pizzashop\commande\app\action\GetCommandeAction;
+use pizzashop\commande\app\action\PatchValiderCommandeAction;
+use pizzashop\commande\app\action\PostCreerCommandeAction;
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 

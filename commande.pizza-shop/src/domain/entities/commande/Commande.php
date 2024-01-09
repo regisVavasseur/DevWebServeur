@@ -1,8 +1,8 @@
 <?php
 
-namespace pizzashop\shop\domain\entities\commande;
+namespace pizzashop\commande\domain\entities\commande;
 
-use pizzashop\shop\domain\dto\commande\CommandeDTO;
+use pizzashop\commande\domain\dto\commande\CommandeDTO;
 
 class Commande extends \Illuminate\Database\Eloquent\Model
 {

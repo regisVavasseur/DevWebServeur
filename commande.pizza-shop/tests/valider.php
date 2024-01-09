@@ -15,8 +15,8 @@ $logger = new \Monolog\Logger('commandes');
 $logger->pushHandler(new \Monolog\Handler\StreamHandler(__DIR__ . '/../logs/commandes.log', \Monolog\Level::Debug));
 
 $commande_id = $argv[1];
-$infoproduit = new \pizzashop\shop\domain\service\catalogue\ServiceCatalogue();
-$service_commande = new \pizzashop\shop\domain\service\commande\ServiceCommande($infoproduit,$logger);
+$infoproduit = new \pizzashop\commande\domain\service\catalogue\ServiceCatalogue();
+$service_commande = new \pizzashop\commande\domain\service\commande\ServiceCommande($infoproduit,$logger);
 $res = $service_commande->validerCommande($commande_id);
 print $res->toJson();
 

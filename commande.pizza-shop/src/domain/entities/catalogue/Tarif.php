@@ -1,6 +1,6 @@
 <?php
 
-namespace pizzashop\shop\domain\entities\catalogue;
+namespace pizzashop\commande\domain\entities\catalogue;
 
 class Tarif extends \Illuminate\database\eloquent\Model
 {
@@ -20,9 +20,9 @@ class Tarif extends \Illuminate\database\eloquent\Model
         return $this->belongsTo(Taille::class, 'taille_id');
     }
 
-    public function toDTO(): \pizzashop\shop\domain\dto\catalogue\TarifDTO
+    public function toDTO(): \pizzashop\commande\domain\dto\catalogue\TarifDTO
     {
-        return new \pizzashop\shop\domain\dto\catalogue\TarifDTO(
+        return new \pizzashop\commande\domain\dto\catalogue\TarifDTO(
             Produit::findOrfail($this->produit_id)->numero,
             Taille::findOrfail($this->taille_id)->toDTO(),
             $this->tarif

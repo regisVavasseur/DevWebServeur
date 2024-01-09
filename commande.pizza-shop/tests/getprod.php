@@ -9,10 +9,10 @@ $db->addConnection(parse_ini_file($dbconf), 'catalogue');
 $db->setAsGlobal();
 $db->bootEloquent();
 
-$ps = new \pizzashop\shop\domain\service\catalogue\ServiceCatalogue();
+$ps = new \pizzashop\commande\domain\service\catalogue\ServiceCatalogue();
 try {
     $produit = $ps->getProduit(1, 4);
     echo $produit->toJson();
-} catch (\pizzashop\shop\domain\service\catalogue\exception\ServiceCatalogueNotFoundException $e) {
+} catch (\pizzashop\commande\domain\service\catalogue\exception\ServiceCatalogueNotFoundException $e) {
     echo $e->getMessage();
 }

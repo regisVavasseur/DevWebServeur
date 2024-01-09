@@ -1,6 +1,6 @@
 <?php
 
-namespace pizzashop\shop\domain\service\catalogue;
+namespace pizzashop\commande\domain\service\catalogue;
 
 class ServiceCatalogueNotFoundException extends \Exception
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace pizzashop\shop\domain\service\catalogue;
+namespace pizzashop\commande\domain\service\catalogue;
 
-use pizzashop\shop\domain\dto\catalogue\ProduitDTO;
+use pizzashop\commande\domain\dto\catalogue\ProduitDTO;
 
 interface iInfoProduit
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace pizzashop\shop\app\action;
+namespace pizzashop\commande\app\action;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;

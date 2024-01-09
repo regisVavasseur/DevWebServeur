@@ -1,10 +1,10 @@
 <?php
 
-namespace pizzashop\shop\domain\dto\item;
+namespace pizzashop\commande\domain\dto\item;
 
-use pizzashop\shop\domain\dto\DTO;
-use pizzashop\shop\domain\entities\catalogue\Produit;
-use pizzashop\shop\domain\entities\catalogue\Taille;
+use pizzashop\commande\domain\dto\DTO;
+use pizzashop\commande\domain\entities\catalogue\Produit;
+use pizzashop\commande\domain\entities\catalogue\Taille;
 
 class ItemDTO extends DTO
 {

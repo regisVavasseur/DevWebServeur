@@ -1,14 +1,14 @@
 <?php
 
-use pizzashop\shop\app\action\AuthRefresh;
-use pizzashop\shop\app\action\AuthSignin;
-use pizzashop\shop\app\action\AuthValidate;
-use pizzashop\shop\app\action\GetCommandeAction;
-use pizzashop\shop\app\action\GetProduitByNumeroAction;
-use pizzashop\shop\app\action\GetProduitsAction;
-use pizzashop\shop\app\action\GetProduitsByCategAction;
-use pizzashop\shop\app\action\PatchValiderCommandeAction;
-use pizzashop\shop\app\action\PostCreerCommandeAction;
+use pizzashop\commande\app\action\AuthRefresh;
+use pizzashop\commande\app\action\AuthSignin;
+use pizzashop\commande\app\action\AuthValidate;
+use pizzashop\commande\app\action\GetCommandeAction;
+use pizzashop\commande\app\action\GetProduitByNumeroAction;
+use pizzashop\commande\app\action\GetProduitsAction;
+use pizzashop\commande\app\action\GetProduitsByCategAction;
+use pizzashop\commande\app\action\PatchValiderCommandeAction;
+use pizzashop\commande\app\action\PostCreerCommandeAction;
 use Psr\Container\ContainerInterface;
 
 return [

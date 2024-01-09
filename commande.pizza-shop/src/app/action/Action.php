@@ -1,6 +1,6 @@
 <?php
 
-namespace pizzashop\shop\app\action;
+namespace pizzashop\commande\app\action;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

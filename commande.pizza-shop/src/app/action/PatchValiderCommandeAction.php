@@ -1,12 +1,12 @@
 <?php
 
-namespace pizzashop\shop\app\action;
+namespace pizzashop\commande\app\action;
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
-use pizzashop\shop\domain\service\commande\iCommander;
-use pizzashop\shop\domain\service\commande\ServiceCommandeInvalidException;
+use pizzashop\commande\domain\service\commande\iCommander;
+use pizzashop\commande\domain\service\commande\ServiceCommandeInvalidException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpBadRequestException;
