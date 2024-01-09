@@ -13,8 +13,8 @@ services:
       - '2080:80'
       - '1443:443'
     volumes:
-      - ../shop.pizza-shop/public:/var/www/html
-      - ../shop.pizza-shop:/var/www
+      - ../commande.pizza-shop/public:/var/www/html
+      - ../commande.pizza-shop:/var/www
     working_dir: /var/www/
     networks:
       pizza-shop.net:
@@ -54,7 +54,7 @@ services:
     networks:
       - pizza-shop.net
     volumes:
-      - ../shop.pizza-shop/sql:/var/sql
+      - ../commande.pizza-shop/sql:/var/sql
 
   # service sql pour le catalogue des pizzas -
   # utilisé par l'api order
@@ -66,7 +66,7 @@ services:
     networks:
       - pizza-shop.net
     volumes:
-      - ../shop.pizza-shop/sql:/var/sql'
+      - ../commande.pizza-shop/sql:/var/sql'
   #
   # service administration des bases sql
   #
