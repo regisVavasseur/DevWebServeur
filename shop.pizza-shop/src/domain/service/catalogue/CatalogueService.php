@@ -41,7 +41,7 @@ class CatalogueService implements iInfoProduit
         )->toArray();
     }
 
-    public function getProduitByNumero(int $numero) : ProduitDTO {
+    public function getProduitByNumero(int $numero): ProduitDTO {
         return Produit::where('numero', $numero)->firstOrFail()->toDTO();
     }
 }

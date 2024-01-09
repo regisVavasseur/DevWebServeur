@@ -1,21 +1,17 @@
 <?php
 declare(strict_types=1);
 
-use pizzashop\shop\app\action\AuthRefresh;
-use pizzashop\shop\app\action\AuthSignin;
-use pizzashop\shop\app\action\AuthValidate;
 use pizzashop\shop\app\action\GetCommandeAction;
 use pizzashop\shop\app\action\GetProduitByNumeroAction;
 use pizzashop\shop\app\action\GetProduitsAction;
 use pizzashop\shop\app\action\GetProduitsByCategAction;
 use pizzashop\shop\app\action\PatchValiderCommandeAction;
 use pizzashop\shop\app\action\PostCreerCommandeAction;
-use pizzashop\shop\domain\middlewares\BeforeCheckJWT;
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 
 
-return function( App $app):void {
+return function (App $app): void {
 
     $app->options('/{routes:.+}', function ($request, $response) {
         return $response;
@@ -33,9 +29,4 @@ return function( App $app):void {
         $app->getContainer()->get('checkJwt')
     );
 
-    $app->get('/produits[/[{filtering}]]', GetProduitsAction::class)->setName('produits');
-
-    $app->get('/produit/{id}[/]', GetProduitByNumeroAction::class)->setName('produit');
-
-    $app->get('/categories/{id_categorie}/produits[/]', GetProduitsByCategAction::class)->setName('produits_by_categ');
 };
