@@ -3,6 +3,7 @@
 namespace pizzashop\auth\api\domain\entites;
 
 use Illuminate\Database\Eloquent\Model;
+use pizzashop\auth\api\domain\dto\UserDTO;
 
 class User extends Model
 {
@@ -30,4 +31,13 @@ class User extends Model
     public $incrementing = false;
 
     public $timestamps = false;
+
+    public function toDTO () {
+        $attributs = [
+            'email' => $this->email,
+            'password' => $this->password
+        ];
+        $userDTO = new UserDTO($attributs);
+        return $userDTO;
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use pizzashop\auth\api\app\actions\SignInAction;
+use pizzashop\auth\api\app\actions\SignUpAction;
 use Psr\Container\ContainerInterface;
 use pizzashop\auth\api\app\actions\ValidateTokenAction;
 use pizzashop\auth\api\app\actions\RefreshTokenAction;
@@ -16,4 +17,7 @@ return [
     RefreshTokenAction::class => function (ContainerInterface $container) {
         return new RefreshTokenAction($container->get(AuthService::class));
     },
+    SignUpAction::class => function (ContainerInterface $container) {
+        return new SignUpAction($container->get(AuthService::class));
+    }
 ];

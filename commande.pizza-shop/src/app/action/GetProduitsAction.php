@@ -29,7 +29,7 @@ class GetProduitsAction
                 'type' => 'resource',
 
                 'produits' => array_map(
-                     function ($produit) use ($request) {
+                    function ($produit) use ($request) {
                         return array_merge(json_decode($produit, true), [
                             'links' => [
                                 'self' => RouteContext::fromRequest($request)->getRouteParser()->urlFor('produit', ['id' => $produit->numero])
@@ -51,12 +51,5 @@ class GetProduitsAction
         } catch (ContainerExceptionInterface $e) {
             throw new HttpNotFoundException($request, $e->getMessage());
         }
-
-
-
-
-       
-
-
     }
 }
