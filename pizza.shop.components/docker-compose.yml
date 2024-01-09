@@ -4,9 +4,9 @@ networks:
     driver: bridge
 services:
 
-  # service api.pizza-shop : api pour la prise de commandes
+  # service api.pizza-shop.commandes : api pour la prise de commandes
   #
-  api.pizza-shop:
+  api.pizza-shop.commandes:
     image: 'canals/php:8.2'
     env_file: ./shop.env
     ports:
@@ -21,10 +21,27 @@ services:
         aliases:
           - api.pizza-shop.local
     depends_on:
+      - api.pizza-shop.catalog
       - pizza-shop.commande.db
-      - pizza-shop.catalogue.db
+      - pizza-shop.catalogue.db #a supprimer apres implémentaion de l'api catalogue en microservice
 
-
+  # service api.pizza-shop.catalog : api pour la consultation du catalogue + création de commandes, etc ...
+  api.pizza-shop.catalog:
+    image: 'canals/php:8.2'
+    env_file: ./cat.env
+    ports:
+      - '3080:80'
+      - '2443:443'
+    volumes:
+        - ../catalog.pizza-shop/public:/var/www/html
+        - ../catalog.pizza-shop:/var/www
+    working_dir: /var/www/
+    networks:
+      pizza-shop.net:
+        aliases:
+          - api.pizza-shop.catalog.local
+    depends_on:
+        - pizza-shop.catalogue.db
 
   # service sql pour le stockage des commandes -
   # utilisé par l'api order
