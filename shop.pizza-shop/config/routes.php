@@ -2,9 +2,6 @@
 declare(strict_types=1);
 
 use pizzashop\shop\app\action\GetCommandeAction;
-use pizzashop\shop\app\action\GetProduitByNumeroAction;
-use pizzashop\shop\app\action\GetProduitsAction;
-use pizzashop\shop\app\action\GetProduitsByCategAction;
 use pizzashop\shop\app\action\PatchValiderCommandeAction;
 use pizzashop\shop\app\action\PostCreerCommandeAction;
 use Slim\App;
