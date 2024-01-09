@@ -33,12 +33,6 @@ return function( App $app):void {
         $app->getContainer()->get('checkJwt')
     );
 
-    $app->post('/signin[/]', AuthSignin::class)->setName('signin');
-
-    $app->get('/validate[/]', AuthValidate::class)->setName('validate');
-
-    $app->get('/refresh[/]', AuthRefresh::class)->setName('refresh');
-
     $app->get('/produits[/[{filtering}]]', GetProduitsAction::class)->setName('produits');
 
     $app->get('/produit/{id}[/]', GetProduitByNumeroAction::class)->setName('produit');
