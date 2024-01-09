@@ -1,0 +1,8 @@
+connection=catalogue
+driver=pgsql
+username=
+password=
+host=pizza-shop.catalogue.db
+database=pizza_catalog
+charset=utf8
+collation=utf8_unicode_ci
