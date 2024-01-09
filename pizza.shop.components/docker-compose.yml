@@ -4,6 +4,23 @@ networks:
     driver: bridge
 services:
 
+  # service api.pizza-shop.gateway : api centrale pour l'ensemble des services qui renvoie vers les autres api
+  api.pizza-shop.gateway:
+    image: 'canals/php:8.2'
+    env_file: ./cat.env
+    ports:
+      - '4080:80'
+      - '3443:443'
+    volumes:
+      - ../gateway.pizza-shop/public:/var/www/html
+      - ../gateway.pizza-shop:/var/www
+    working_dir: /var/www/
+    networks:
+      pizza-shop.net:
+        aliases:
+          - api.pizza-shop.catalog.local
+
+
   # service api.pizza-shop.commandes : api pour la prise de commandes
   #
   api.pizza-shop.commandes:
@@ -42,6 +59,7 @@ services:
           - api.pizza-shop.catalog.local
     depends_on:
         - pizza-shop.catalogue.db
+
 
   # service sql pour le stockage des commandes -
   # utilisé par l'api order
