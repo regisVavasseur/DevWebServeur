@@ -7,7 +7,7 @@ use pizzashop\auth\api\domain\dto\TokenDTO;
 use pizzashop\auth\api\domain\dto\UserDTO;
 
 interface AuthServiceInterface {
-    public function signup(CredentialsDTO $credentialsDTO): UserDTO;
+    public function signup(CredentialsDTO $credentialsDTO): TokenDTO;
     public function signin(CredentialsDTO $credentialsDTO): TokenDTO;
     public function validate(TokenDTO $tokenDTO): UserDTO;
     public function refresh(TokenDTO $tokenDTO): TokenDTO;
