@@ -38,9 +38,14 @@ services:
         aliases:
           - api.pizza-shop.local
     depends_on:
-      - api.pizza-shop.catalog
-      - pizza-shop.commande.db
-      - pizza-shop.catalogue.db #a supprimer apres implémentaion de l'api catalogue en microservice
+      rabbitmq:
+        condition: service_healthy
+      api.pizza-shop.catalog:
+        condition: service_started
+      pizza-shop.commande.db:
+        condition: service_started
+      pizza-shop.catalogue.db:
+        condition: service_started
 
   # service api.pizza-shop.catalog : api pour la consultation du catalogue + création de commandes, etc ...
   api.pizza-shop.catalog:
@@ -50,15 +55,15 @@ services:
       - '3080:80'
       - '2443:443'
     volumes:
-        - ../catalog.pizza-shop/public:/var/www/html
-        - ../catalog.pizza-shop:/var/www
+      - ../catalog.pizza-shop/public:/var/www/html
+      - ../catalog.pizza-shop:/var/www
     working_dir: /var/www/
     networks:
       pizza-shop.net:
         aliases:
           - api.pizza-shop.catalog.local
     depends_on:
-        - pizza-shop.catalogue.db
+      - pizza-shop.catalogue.db
 
 
   # service sql pour le stockage des commandes -
@@ -96,11 +101,11 @@ services:
     networks:
       - pizza-shop.net
 
-######################################
-###  AUTH Service : service d'authentification JWT
-###  api api.auth : auth, check, refresh de token JWT
-###  utilise sa propre base de données
-######################################
+  ######################################
+  ###  AUTH Service : service d'authentification JWT
+  ###  api api.auth : auth, check, refresh de token JWT
+  ###  utilise sa propre base de données
+  ######################################
   api.pizza-auth:
     image: 'canals/php:8.2'
     env_file: ./auth.env
@@ -116,7 +121,11 @@ services:
         aliases:
           - auth.pizza-shop.local
     depends_on:
-      - pizza-shop.auth.db
+      rabbitmq:
+        condition: service_healthy
+      pizza-shop.auth.db:
+        condition: service_started
+
 
   pizza-shop.auth.db:
     image: 'mariadb:latest'
@@ -138,6 +147,11 @@ services:
     ports:
       - '15672:15672'
       - '5672:5672'
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 8s
+      timeout: 30s
+      retries: 3
     networks:
       - pizza-shop.net
     volumes:
@@ -145,5 +159,3 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=@dm1#!
- 
-
