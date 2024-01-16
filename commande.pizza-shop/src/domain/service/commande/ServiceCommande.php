@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use pizzashop\shop\domain\dto\commande\CommandeDTO;
 use pizzashop\shop\domain\entities\commande\Commande;
 use pizzashop\shop\domain\entities\commande\Item;
+use pizzashop\shop\domain\utils\CatalogDataProvider;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 
@@ -14,13 +15,17 @@ class ServiceCommande implements iCommander
 {
     private LoggerInterface $logger;
 
-    public function __construct(LoggerInterface $logger)
+    private CatalogDataProvider $catalogDataProvider;
+
+    public function __construct(LoggerInterface $logger, CatalogDataProvider $catalogDataProvider)
     {
         $this->logger = $logger;
+        $this->catalogDataProvider = $catalogDataProvider;
     }
 
     /**
      * @throws ServiceCommandeInvalidException
+     * @throws \Exception
      */
     public function creerCommande(CommandeDTO $commandeDTO): CommandeDTO
     {
@@ -83,6 +88,12 @@ class ServiceCommande implements iCommander
         $commande->delai = $delai;
 
         foreach ($arrayItems as $itemDTO) {
+
+            try {
+                $itemDTO = $this->catalogDataProvider->getItemInfos($itemDTO);
+            } catch (\Exception $e) {
+                throw new ServiceCommandeInvalidException($e->getMessage(), 404);
+            }
 
             $item = new Item();
             $item->numero = $itemDTO->getNumero();
