@@ -23,4 +23,10 @@ class ProduitDTO extends \pizzashop\shop\domain\dto\DTO
         $this->tarifs = $tarifs;
     }
 
+    public static function fromJson(string $json): ProduitDTO
+    {
+        $data = json_decode($json, true);
+        
+    }
+
 }

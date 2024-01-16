@@ -2,10 +2,8 @@
 
 namespace pizzashop\shop\app\action;
 
-use GuzzleHttp\Client;
 use pizzashop\shop\domain\dto\commande\CommandeDTO;
 use pizzashop\shop\domain\dto\item\ItemDTO;
-use pizzashop\shop\domain\entities\catalogue\Taille;
 use pizzashop\shop\domain\service\commande\iCommander;
 use pizzashop\shop\domain\service\commande\ServiceCommandeNotFoundException;
 use Slim\Exception\HttpNotFoundException;

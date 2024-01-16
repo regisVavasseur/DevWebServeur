@@ -4,24 +4,18 @@ namespace pizzashop\shop\domain\service\commande;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use pizzashop\shop\domain\dto\commande\CommandeDTO;
-use pizzashop\shop\domain\entities\catalogue\Produit;
 use pizzashop\shop\domain\entities\commande\Commande;
 use pizzashop\shop\domain\entities\commande\Item;
-use pizzashop\shop\domain\service\catalogue\iInfoProduit;
-use pizzashop\shop\domain\service\catalogue\ServiceCatalogueNotFoundException;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 
 
 class ServiceCommande implements iCommander
 {
-
-    private iInfoProduit $iInfoProduit;
     private LoggerInterface $logger;
 
-    public function __construct(iInfoProduit $serviceinfoProduit, LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger)
     {
-        $this->iInfoProduit = $serviceinfoProduit;
         $this->logger = $logger;
     }
 
@@ -73,7 +67,7 @@ class ServiceCommande implements iCommander
                 throw new ServiceCommandeInvalidException();
             }
             // Validation de la taille de l'item | Constantes dans Produit.php
-            if (!in_array($item->getTaille(), [Produit::TAILLE_NORMALE, Produit::TAILLE_GRANDE])) {
+            if (!in_array($item->getTaille(), [1, 2])) {
                 throw new ServiceCommandeInvalidException();
             }
         }
@@ -113,10 +107,6 @@ class ServiceCommande implements iCommander
     public function accederCommande(string $idCommande, string $email): CommandeDTO
     {
         try {
-            //return Commande::where('id', $idCommande)->firstOrFail()
-            //    ->toDTO();
-
-            //retourner la commande uniquement si elle appartient au client sinon retourner une erreur 404
             return Commande::where('id', $idCommande)->where('mail_client', $email)->firstOrFail()
                 ->toDTO();
 
@@ -128,11 +118,7 @@ class ServiceCommande implements iCommander
     public function validerCommande(string $idCommande, string $email): CommandeDTO
     {
         try {
-            //$commande = Commande::where('id', $idCommande)->firstOrFail();
-
-            //retourner la commande uniquement si elle appartient au client sinon retourner une erreur 404
             $commande = Commande::where('id', $idCommande)->where('mail_client', $email)->firstOrFail();
-
         } catch (ModelNotFoundException $e) {
             throw new ServiceCommandeInvalidException("Commande inexistante",404);
         }
