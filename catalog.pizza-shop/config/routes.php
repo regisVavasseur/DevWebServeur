@@ -12,9 +12,9 @@ return function( App $app):void {
         return $response;
     });
 
-    $app->get('/produits[/[{filtering}]]', GetProduitsAction::class)->setName('produits');
+    $app->get('/produits[/filter/{filtering}]', GetProduitsAction::class)->setName('produits');
 
-    $app->get('/produit/{id}[/]', GetProduitByNumeroAction::class)->setName('produit');
+    $app->get('/produits/{id}', GetProduitByNumeroAction::class)->setName('produit');
 
     $app->get('/categories/{id_categorie}/produits[/]', GetProduitsByCategAction::class)->setName('produits_by_categ');
 };

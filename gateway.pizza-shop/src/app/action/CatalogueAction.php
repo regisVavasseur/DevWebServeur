@@ -13,21 +13,10 @@ use Slim\Exception\HttpUnauthorizedException;
 class CatalogueAction extends Action
 {
 
-    function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        try {
-            $response = $this->service->request($request->getMethod(),$request->getUri()->getPath(),
-            [
-                'headers' => ['Authorization' => $request->getHeader('Authorization')],
-                'json' => $request->getParsedBody()
-            ]);
-        } catch (ConnectException | ServerException $e) {
-            throw new HttpInternalServerErrorException($e->getCode(), $e->getMessage());
-        } catch (ClientException $e) {
-            if ($e->getCode() === 401) {
-               throw new HttpUnauthorizedException($e->getCode(),$e->getMessage());
-            }
-            throw new HttpInternalServerErrorException($e->getCode(), $e->getMessage());
-        }
+        //enelever /api/ de la route et héritage de la méthode parente
+        $route = substr($request->getUri()->getPath(), 4);
+        return parent::__invoke($request->withUri($request->getUri()->withPath($route)), $response, $args);
     }
 }

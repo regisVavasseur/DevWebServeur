@@ -11,4 +11,7 @@ return [
             'issuer' => 'pizza-shop.auth',
         ],
     ],
+    "uri.commande" => "http://api.pizza-shop.commandes",
+    "uri.catalogue" => "http://api.pizza-shop.catalog",
+    "uri.auth" => "http://api.pizza-auth",
 ];

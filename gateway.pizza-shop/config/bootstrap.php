@@ -13,6 +13,10 @@ $containerBuilder = new ContainerBuilder();
 // Ajouter les paramètres de configuration au conteneur
 $containerBuilder->addDefinitions($settings);
 
+// Ajouts des dépendances des actions
+$actions = require __DIR__ . '/actions.php';
+$containerBuilder->addDefinitions($actions);
+
 // Compiler et créer le conteneur de dépendances
 $container = $containerBuilder->build();
 

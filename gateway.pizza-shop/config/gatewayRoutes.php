@@ -22,13 +22,7 @@ return function(App $app) {
         });
 
         $app->group('produits', function($app) {
-            $app->get('[/{filtering}]', ProduitAction::class);
-            $app->get('/{id}', ProduitAction::class);
-            $app->get('/categories/{id_categorie}', ProduitAction::class);
-        });
-
-        $app->group('catalogue', function($app) {
-            $app->get('[/{filtering}]', CatalogueAction::class);
+            $app->get('[/filter/{filtering}]', CatalogueAction::class);
             $app->get('/{id}', CatalogueAction::class);
             $app->get('/categories/{id_categorie}', CatalogueAction::class);
         });
