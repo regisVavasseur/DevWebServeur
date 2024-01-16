@@ -1,10 +1,8 @@
 <?php
 
-namespace pizzashop\commande\domain\dto\item;
+namespace pizzashop\shop\domain\dto\item;
 
-use pizzashop\commande\domain\dto\DTO;
-use pizzashop\commande\domain\entities\catalogue\Produit;
-use pizzashop\commande\domain\entities\catalogue\Taille;
+use pizzashop\shop\domain\dto\DTO;
 
 class ItemDTO extends DTO
 {
@@ -18,11 +16,7 @@ class ItemDTO extends DTO
     public function __construct(int $numero, int $taille, int $quantite)
     {
         $this->numero = $numero;
-        $this->libelle = Produit::where('numero', $numero)->firstOrFail()->libelle;
         $this->taille = $taille;
-        $this->libelle_taille = Taille::where('id', $taille)->firstOrFail()->libelle;
-        $this->tarif = Produit::where('numero', $numero)->firstOrFail()
-            ->tarif()->where('taille_id', $taille)->firstOrFail()->tarif;
         $this->quantite = $quantite;
     }
 

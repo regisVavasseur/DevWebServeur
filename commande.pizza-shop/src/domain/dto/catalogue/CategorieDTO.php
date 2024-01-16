@@ -1,8 +1,8 @@
 <?php
 
-namespace pizzashop\commande\domain\dto\catalogue;
+namespace pizzashop\shop\domain\dto\catalogue;
 
-class CategorieDTO extends \pizzashop\commande\domain\dto\DTO
+class CategorieDTO extends \pizzashop\shop\domain\dto\DTO
 {
 
     public int $id;

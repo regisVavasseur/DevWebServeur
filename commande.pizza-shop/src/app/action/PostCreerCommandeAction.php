@@ -1,6 +1,6 @@
 <?php
 
-namespace pizzashop\commande\app\action;
+namespace pizzashop\shop\app\action;
 
 use pizzashop\shop\domain\dto\commande\CommandeDTO;
 use pizzashop\shop\domain\dto\item\ItemDTO;

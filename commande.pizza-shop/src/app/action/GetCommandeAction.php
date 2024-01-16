@@ -1,9 +1,9 @@
 <?php
 
-namespace pizzashop\commande\app\action;
+namespace pizzashop\shop\app\action;
 
-use pizzashop\commande\domain\service\commande\iCommander;
-use pizzashop\commande\domain\service\commande\ServiceCommandeNotFoundException;
+use pizzashop\shop\domain\service\commande\iCommander;
+use pizzashop\shop\domain\service\commande\ServiceCommandeNotFoundException;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;

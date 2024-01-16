@@ -1,6 +1,6 @@
 <?php
 
-namespace pizzashop\commande\domain\middlewares;
+namespace pizzashop\shop\domain\middlewares;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

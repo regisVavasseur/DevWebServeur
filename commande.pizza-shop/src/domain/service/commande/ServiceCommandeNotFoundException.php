@@ -1,6 +1,6 @@
 <?php
 
-namespace pizzashop\commande\domain\service\commande;
+namespace pizzashop\shop\domain\service\commande;
 
 use Exception;
 
