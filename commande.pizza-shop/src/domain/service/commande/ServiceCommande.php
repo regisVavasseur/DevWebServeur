@@ -1,27 +1,21 @@
 <?php
 
-namespace pizzashop\commande\domain\service\commande;
+namespace pizzashop\shop\domain\service\commande;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use pizzashop\commande\domain\dto\commande\CommandeDTO;
-use pizzashop\commande\domain\entities\catalogue\Produit;
-use pizzashop\commande\domain\entities\commande\Commande;
-use pizzashop\commande\domain\entities\commande\Item;
-use pizzashop\commande\domain\service\catalogue\iInfoProduit;
-use pizzashop\commande\domain\service\catalogue\ServiceCatalogueNotFoundException;
+use pizzashop\shop\domain\dto\commande\CommandeDTO;
+use pizzashop\shop\domain\entities\commande\Commande;
+use pizzashop\shop\domain\entities\commande\Item;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 
 
 class ServiceCommande implements iCommander
 {
-
-    private iInfoProduit $iInfoProduit;
     private LoggerInterface $logger;
 
-    public function __construct(iInfoProduit $serviceinfoProduit, LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger)
     {
-        $this->iInfoProduit = $serviceinfoProduit;
         $this->logger = $logger;
     }
 
@@ -73,7 +67,7 @@ class ServiceCommande implements iCommander
                 throw new ServiceCommandeInvalidException();
             }
             // Validation de la taille de l'item | Constantes dans Produit.php
-            if (!in_array($item->getTaille(), [Produit::TAILLE_NORMALE, Produit::TAILLE_GRANDE])) {
+            if (!in_array($item->getTaille(), [1, 2])) {
                 throw new ServiceCommandeInvalidException();
             }
         }

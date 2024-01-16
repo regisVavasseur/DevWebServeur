@@ -14,12 +14,4 @@ class CategorieDTO extends \pizzashop\commande\domain\dto\DTO
         $this->libelle = $libelle_categorie;
     }
 
-    public function toArray()
-    {
-        return [
-            'id' => $this->id,
-            'libelle' => $this->libelle
-        ];
-    }
-
 }
