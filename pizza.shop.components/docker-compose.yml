@@ -129,5 +129,29 @@ services:
     volumes:
       - ../auth.pizza-shop/sql:/var/sql
 
- 
+  pizza-shop.production.db:
+    image: 'mariadb:latest'
+    command: '--default-authentication-plugin=mysql_native_password --character-set-server=utf8 --collation-server=utf8_general_ci'
+    env_file: ./production.env
+    ports:
+      - '3309:3306'
+    networks:
+      - pizza-shop.net
+    volumes:
+      - ../production.pizza-shop/src/sql:/var/sql
+
+  api.production:
+    image: 'node:alpine'
+    networks:
+      - pizza-shop.net
+    working_dir: /usr/app
+    command: sh -c "npm i && npm run watch" #for development only
+    #command: sh -c "npm i && npm start" #for production only
+    volumes:
+      - ../production.pizza-shop:/usr/app
+    ports:
+      - '3333:3000'
+    environment:
+      PORT: '3000'
+      NODE_ENV: 'development'
 
