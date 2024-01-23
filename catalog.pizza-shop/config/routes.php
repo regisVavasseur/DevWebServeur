@@ -11,10 +11,11 @@ return function( App $app):void {
     $app->options('/{routes:.+}', function ($request, $response) {
         return $response;
     });
+    $app->group('/produits', function($app) {
+        $app->get('[/filter/{filtering}[/]]', GetProduitsAction::class)->setName('produits');
 
-    $app->get('/produits[/filter/{filtering}]', GetProduitsAction::class)->setName('produits');
+        $app->get('/{id}[/]', GetProduitByNumeroAction::class)->setName('produit');
 
-    $app->get('/produits/{id}', GetProduitByNumeroAction::class)->setName('produit');
-
-    $app->get('/categories/{id_categorie}/produits[/]', GetProduitsByCategAction::class)->setName('produits_by_categ');
+        $app->get('/categorie/{id_categorie}[/]', GetProduitsByCategAction::class)->setName('produits_by_categ');
+    });
 };

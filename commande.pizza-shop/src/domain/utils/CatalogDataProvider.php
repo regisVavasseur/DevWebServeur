@@ -34,7 +34,7 @@ class CatalogDataProvider
             'timeout' => 20.0,
         ]);
 
-        $response = $client->request('GET', '/produit/'.$numero, [
+        $response = $client->request('GET', '/produits/'.$numero, [
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',

@@ -31,7 +31,7 @@ abstract class Action
             //envoyer la requête à l'API catalogue
             $client = new \GuzzleHttp\Client([
                 'base_uri' => $this->uri,
-                'timeout' => 20.0,
+                'timeout' => 60.0,
             ]);
 
             $response = $client->request($method, $route, [
@@ -59,12 +59,12 @@ abstract class Action
             return $response;
 
         } catch (ConnectException | ServerException $e) {
-            throw new HttpInternalServerErrorException($e->getCode(), $e->getMessage());
+            throw new HttpInternalServerErrorException($request, $e->getMessage());
         } catch (ClientException $e) {
             if ($e->getCode() === 401) {
-                throw new HttpUnauthorizedException($e->getCode(),$e->getMessage());
+                throw new HttpUnauthorizedException($request, $e->getMessage());
             }
-            throw new HttpInternalServerErrorException($e->getCode(), $e->getMessage());
+            throw new HttpInternalServerErrorException($request, $e->getMessage());
         }
     }
 }
