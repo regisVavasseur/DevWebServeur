@@ -38,7 +38,7 @@ class GetProduitsAction
                     $products
                 ),
                 'links' => [
-                    'self' => RouteContext::fromRequest($request)->getRouteParser()->urlFor('produits'),
+                    'self' => RouteContext::fromRequest($request)->getRouteParser()->urlFor('produits', ['filtering' => $args['filtering'] ?? null])
                 ]
             ];
 

@@ -19,10 +19,21 @@ class SignInAction
 
     public function __invoke(Request $request, Response $response): Response
     {
-        $params = json_decode((string) $request->getBody(), true) ?? [];
+        //les credentials sont transportés dans le header
+        //Authorization en mode Basic. En cas d'échec de l'authentification une réponse 401 avec un
+        //message d'erreur dans un objet JSON et retournée. En cas de succès, une réponse 200 avec
+        //le couple (access token, refresh token) dans un objet JSON est retournée.
 
-        $email = $params['email'] ?? null;
-        $password = $params['password'] ?? null;
+        //récupérer les credentials depuis le header
+        $tokenHeader = $request->getHeaderLine('Authorization');
+        $credentials = !empty($tokenHeader) ? trim(str_replace('Basic', '', $tokenHeader)) : '';
+
+        //decode base64
+        $credentials = base64_decode($credentials);
+
+        //séparer les credentials en email et password
+        $email = substr($credentials, 0, strpos($credentials, ':'));
+        $password = substr($credentials, strpos($credentials, ':') + 1);
 
         if (null === $email || null === $password) {
             $response->getBody()->write(json_encode(['error' => 'Missing email or password']));
@@ -30,7 +41,7 @@ class SignInAction
         }
 
         try {
-            $credentials = new CredentialsDTO($params['email'], $params['password']);
+            $credentials = new CredentialsDTO($email, $password);
             $tokenDTO = $this->authService->signin($credentials);
 
             // Encode token DTO to JSON

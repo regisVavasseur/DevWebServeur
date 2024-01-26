@@ -8,4 +8,5 @@ return [
     'connection.name.catalogue' => 'catalog',
     'connection.name.commande' => 'commande',
     'uri.auth' => 'http://auth.pizza-shop.local',
+    'uri.catalogue' => 'http://api.pizza-shop.catalog',
 ];

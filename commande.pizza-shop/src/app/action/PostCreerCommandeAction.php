@@ -1,13 +1,11 @@
 <?php
 
-namespace pizzashop\commande\app\action;
+namespace pizzashop\shop\app\action;
 
-use GuzzleHttp\Client;
-use pizzashop\commande\domain\dto\commande\CommandeDTO;
-use pizzashop\commande\domain\dto\item\ItemDTO;
-use pizzashop\commande\domain\entities\catalogue\Taille;
-use pizzashop\commande\domain\service\commande\iCommander;
-use pizzashop\commande\domain\service\commande\ServiceCommandeNotFoundException;
+use pizzashop\shop\domain\dto\commande\CommandeDTO;
+use pizzashop\shop\domain\dto\item\ItemDTO;
+use pizzashop\shop\domain\service\commande\iCommander;
+use pizzashop\shop\domain\service\commande\ServiceCommandeNotFoundException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;

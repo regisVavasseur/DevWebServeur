@@ -33,10 +33,10 @@ class SignUpAction
         if (empty($email) || empty($password)) return $response->withStatus(400);
 
         $credentialsDTO = new CredentialsDTO($params['email'], $params['password']);
-        $userDTO = $this->authService->signup($credentialsDTO);
+        $tokenDto = $this->authService->signup($credentialsDTO);
 
         // Encode token DTO to JSON
-        $response->getBody()->write(json_encode($userDTO));
+        $response->getBody()->write(json_encode($tokenDto));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         } catch (AuthServiceCredentialsException $e) {
             // Handle invalid credentials

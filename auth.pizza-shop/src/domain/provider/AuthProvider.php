@@ -56,9 +56,10 @@ class AuthProvider
         }
     }
 
-    public function register(string $email, string $password): void
+    //reçois un mot de passe en clair et retourne un hash du mot de passe
+    public function register(string $password): string
     {
-
+        return password_hash($password, PASSWORD_DEFAULT);
     }
 
     public function activate(string $token): void

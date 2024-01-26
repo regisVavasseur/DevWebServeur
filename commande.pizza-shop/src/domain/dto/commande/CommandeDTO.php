@@ -1,10 +1,10 @@
 <?php
 
-namespace pizzashop\commande\domain\dto\commande;
+namespace pizzashop\shop\domain\dto\commande;
 
-use pizzashop\commande\domain\dto\DTO;
-use pizzashop\commande\domain\dto\item\ItemDTO;
-use pizzashop\commande\domain\entities\commande\Commande;
+use pizzashop\shop\domain\dto\DTO;
+use pizzashop\shop\domain\dto\item\ItemDTO;
+use pizzashop\shop\domain\entities\commande\Commande;
 
 class CommandeDTO extends DTO
 {

@@ -38,9 +38,14 @@ services:
         aliases:
           - api.pizza-shop.local
     depends_on:
-      - api.pizza-shop.catalog
-      - pizza-shop.commande.db
-      - pizza-shop.catalogue.db #a supprimer apres implémentaion de l'api catalogue en microservice
+      rabbitmq:
+        condition: service_healthy
+      api.pizza-shop.catalog:
+        condition: service_started
+      pizza-shop.commande.db:
+        condition: service_started
+      pizza-shop.catalogue.db:
+        condition: service_started
 
   # service api.pizza-shop.catalog : api pour la consultation du catalogue + création de commandes, etc ...
   api.pizza-shop.catalog:
@@ -116,7 +121,11 @@ services:
         aliases:
           - auth.pizza-shop.local
     depends_on:
-      - pizza-shop.auth.db
+      rabbitmq:
+        condition: service_healthy
+      pizza-shop.auth.db:
+        condition: service_started
+
 
   pizza-shop.auth.db:
     image: 'mariadb:latest'
@@ -128,6 +137,29 @@ services:
       - pizza-shop.net
     volumes:
       - ../auth.pizza-shop/sql:/var/sql
+
+  #######################################
+  ### RabbitMQ Service
+  ###
+  #######################################
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - '15672:15672'
+      - '5672:5672'
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 8s
+      timeout: 30s
+      retries: 3
+    networks:
+      - pizza-shop.net
+    volumes:
+      - ./rabbitmq_dir:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=@dm1#!
+
 
   pizza-shop.production.db:
     image: 'mariadb:latest'

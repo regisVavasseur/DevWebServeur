@@ -27,16 +27,22 @@ class AuthService implements AuthServiceInterface
         $this->logger = $logger;
     }
 
-    public function signup(CredentialsDTO $credentialsDTO): UserDTO
+    public function signup(CredentialsDTO $credentialsDTO): TokenDTO
     {
         $user = User::find($credentialsDTO->email);
         if (!is_null($user)) throw new AuthServiceCredentialsException("User already exists");
 
         $user = new User();
         $user->email = $credentialsDTO->email;
-        $user->password = $credentialsDTO->password;
+        $user->password = $this->authProvider->register($credentialsDTO->password);
         $user->save();
-        return $user->toDTO();
+
+        // Récupération du token utilisateur en le connectant
+        $this->authProvider->checkCredentials($user->email, $credentialsDTO->password);
+        $user = $this->authProvider->getAuthenticatedUser(); // Assuming this returns an array of user data.
+        $jwt = $this->jwtManager->create(['username' => $user['username'], 'email' => $user['email']]);
+
+        return new TokenDTO($jwt, $user['refresh_token']);
     }
 
     public function signin(CredentialsDTO $credentialsDTO): TokenDTO

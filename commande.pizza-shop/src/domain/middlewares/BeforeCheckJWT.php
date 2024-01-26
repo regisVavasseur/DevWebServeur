@@ -1,6 +1,6 @@
 <?php
 
-namespace pizzashop\commande\domain\middlewares;
+namespace pizzashop\shop\domain\middlewares;
 
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;

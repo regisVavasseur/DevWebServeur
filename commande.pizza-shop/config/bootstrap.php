@@ -1,7 +1,7 @@
 <?php
 
-use pizzashop\commande\domain\middlewares\Cors;
-use pizzashop\commande\domain\utils\Eloquent;
+use pizzashop\shop\domain\middlewares\Cors;
+use pizzashop\shop\domain\utils\Eloquent;
 use Slim\Factory\AppFactory;
 
 // ajout du coneteneur de dépendances

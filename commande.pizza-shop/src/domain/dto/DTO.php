@@ -1,6 +1,6 @@
 <?php
 
-namespace pizzashop\commande\domain\dto;
+namespace pizzashop\shop\domain\dto;
 
 use Illuminate\Database\Eloquent\Model;
 
