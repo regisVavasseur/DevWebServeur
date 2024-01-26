@@ -1,22 +1,29 @@
-import express from "express"
-import helmet from "helmet"
-
-//creation d'une instance express
-const app = express();
-
-// utilisation de middleware pour le traitement des requetes
-app.use(express.json());
-app.use(express.urlencoded( {extended: false}));
-app.use(helmet());
+import helmet from "helmet";
+import express from "express";
+import GetAllCommandesAction from "../app/actions/getAllCommandesAction.js";
+export default  (app) => {
+    // utilisation de middleware pour le traitement des requetes
+    app.use(express.json());
+    app.use(express.urlencoded( {extended: false}));
+    app.use(helmet());
 
 // definition des routes :
-app.route('/accueil')
-    .get(async (req, res, next) => {
-        try {
-            res.send('Bienvenue sur votre application EliaReg !');
-        } catch ( err ) {
-            next(err)
-        }
-    });
+    app.route('/accueil')
+        .get(async (req, res, next) => {
+            try {
+                res.send('Bienvenue sur votre application EliaReg !');
+            } catch ( err ) {
+                next(err)
+            }
+        });
 
-export default app;
+    app.route(('/commandes'))
+        .get(async (req, res, next) => {
+            try {
+                const commandeAction = new GetAllCommandesAction();
+                res.send(commandeAction.execute());
+            } catch (err) {
+                next(err)
+            }
+        })
+}
