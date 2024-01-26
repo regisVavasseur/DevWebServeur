@@ -158,7 +158,7 @@ services:
       - ./rabbitmq_dir:/var/lib/rabbitmq
     environment:
       - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=@dm1#!
+      - RABBITMQ_DEFAULT_PASS=admin
 
   #######################################
   ###  Service Websocket Notifications
