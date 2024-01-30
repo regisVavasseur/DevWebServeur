@@ -22,7 +22,6 @@ services:
 
 
   # service api.pizza-shop.commandes : api pour la prise de commandes
-  #
   api.pizza-shop.commandes:
     image: 'canals/php:8.2'
     env_file: ./shop.env
