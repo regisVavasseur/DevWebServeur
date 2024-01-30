@@ -158,8 +158,25 @@ services:
       - ./rabbitmq_dir:/var/lib/rabbitmq
     environment:
       - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=@dm1#!
+      - RABBITMQ_DEFAULT_PASS=admin
 
+  #######################################
+  ###  Service Websocket Notifications
+  #######################################
+  notification-service:
+    image: node:20-alpine
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../notification-service:/app
+    working_dir: /app
+    command: sh -c "npm install && npm start"
+    networks:
+      - pizza-shop.net
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - rabbitmq
 
   pizza-shop.production.db:
     image: 'mariadb:latest'
@@ -185,5 +202,3 @@ services:
       - '3333:3000'
     env_file:
       - ./production.env
-
-
