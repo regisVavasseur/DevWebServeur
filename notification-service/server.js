@@ -38,10 +38,16 @@ async function connectToRabbitMQ() {
         console.log('Connected to RabbitMQ');
 
         const channel = await conn.createChannel();
-        await channel.assertQueue(QUEUE_NAME, { durable: false });
-        console.log(`Waiting for messages in ${QUEUE_NAME}. To exit press CTRL+C`);
+        const exchange = 'pizzashop';
+        const routingKey = 'suivi';
+        const queue = 'suivi_commandes';
 
-        channel.consume(QUEUE_NAME, (msg) => {
+        await channel.assertExchange(exchange, 'direct', { durable: false });
+        await channel.assertQueue(queue, { durable: false });
+        await channel.bindQueue(queue, exchange, routingKey);
+        console.log(`Waiting for messages in ${queue}. To exit press CTRL+C`);
+
+        channel.consume(queue, (msg) => {
             if (msg !== null) {
                 console.log(`Received message: ${msg.content.toString()}`);
                 const { orderId, status } = JSON.parse(msg.content.toString());

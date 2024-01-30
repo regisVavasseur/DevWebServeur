@@ -5,7 +5,7 @@ namespace pizzashop\auth\api\domain\dto;
 class UserDTO
 {
     public string $email;
-    public string $username;
+    public ?string $username;
     public string $password;
     public string $activationToken;
     public ?string $activationTokenExpirationDate; // Optional as it can be null

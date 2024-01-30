@@ -1,4 +1,5 @@
 import mysqlKnex from "../../../config/knex.js";
+import MessagePublisher from './MessagePublisher.js';
 
 async function getCommandeById(id) {
     const commande = await mysqlKnex("commande")
@@ -11,6 +12,34 @@ async function getAllCommandes() {
     const commandes = await mysqlKnex("commande")
         .select();
     return commandes;
+}
+async function createOrder(orderDataJson) {
+    const newOrder = {
+        id: orderDataJson.commande.id,
+        delai: orderDataJson.commande.delai,
+        date_commande: orderDataJson.commande.date,
+        type_livraison: orderDataJson.commande.type_livraison,
+        etape: 1,
+        montant_total: orderDataJson.commande.montant,
+        mail_client: orderDataJson.commande.mail_client
+    };
+
+    await mysqlKnex('commande').insert(newOrder);
+
+    for (const item of orderDataJson.commande.items) {
+        const newItem = {
+            numero: item.numero,
+            libelle: item.libelle,
+            taille: item.taille,
+            libelle_taille: item.libelle_taille,
+            tarif: item.tarif,
+            quantite: item.quantite,
+            commande_id: newOrder.id
+        };
+
+        await mysqlKnex('item').insert(newItem);
+    }
+
 }
 
 async function modificationEtatCommande(id, etat){
@@ -37,7 +66,15 @@ async function modificationEtatCommande(id, etat){
             .update({etape: etat});
 
     commande = await getCommandeById(id);
+
+    // Créez une instance de MessagePublisher
+    const messagePublisher = new MessagePublisher();
+    messagePublisher.publish(
+        id,
+        (etat === 1 ? "REÇUE" : (etat === 2 ? "EN PRÉPARATION" : "PRÊTE") )
+    );
+
     return commande;
 }
 
-export { getCommandeById, getAllCommandes, modificationEtatCommande };
+export { getCommandeById, getAllCommandes, modificationEtatCommande, createOrder };

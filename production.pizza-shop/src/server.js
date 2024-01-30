@@ -1,6 +1,8 @@
 //importation de l'application depuis le fichier de configuration des routes
 import express from "express"
 import routeConfig from "../src/config/routes.js";
+import { MessageConsumer } from './app/domain/service/messageConsumer.js';
+
 
 //creation d'une instance express
 const app = express();
@@ -15,3 +17,6 @@ const port = process.env.port || 3000;
 app.listen(port, () => {
     console.log('Le serveur est en écoute sur le port ' + port);
 })
+
+const messageConsumer = new MessageConsumer();
+messageConsumer.consume();
